@@ -1,0 +1,2195 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="KidsLogic">
+  <title>KidsLogic 🧠 - Khoanh Tròn Số & Học Đếm Thông Minh</title>
+  <!-- Tailwind CSS via allowlisted CDN -->
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+    body {
+      font-family: 'Nunito', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #FFF1EB 0%, #D5EEFB 50%, #E8F0FE 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .font-cute {
+      font-family: 'Comfortaa', cursive;
+    }
+    /* Keyframe Animations */
+    @keyframes bounceIn {
+      0% { transform: scale(0.3); opacity: 0; }
+      50% { transform: scale(1.12); opacity: 1; }
+      70% { transform: scale(0.92); }
+      100% { transform: scale(1); }
+    }
+    @keyframes popIn {
+      0% { transform: scale(0); opacity: 0; }
+      70% { transform: scale(1.2); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes wobble {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-6deg); }
+      75% { transform: rotate(6deg); }
+    }
+    @keyframes gentleFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-10px); }
+      40%, 80% { transform: translateX(10px); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6); }
+      50% { box-shadow: 0 0 0 16px rgba(74, 222, 128, 0); }
+    }
+    .animate-bounce-in { animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    .animate-pop-in { animation: popIn 0.4s ease-out forwards; }
+    .animate-wobble { animation: wobble 2.5s infinite ease-in-out; }
+    .animate-float { animation: gentleFloat 3s infinite ease-in-out; }
+    .animate-shake { animation: shake 0.45s ease-in-out; }
+    .animate-glow { animation: pulseGlow 1.2s infinite; }
+
+    /* Custom 3D Button Shadows for Kids */
+    .btn-3d {
+      transition: all 0.1s ease;
+      position: relative;
+      touch-action: manipulation;
+    }
+    .btn-3d:active {
+      transform: translateY(4px);
+    }
+    .btn-primary-3d {
+      background-color: #FF5E7E;
+      box-shadow: 0 6px 0 #D63353, 0 10px 20px rgba(255, 94, 126, 0.4);
+    }
+    .btn-primary-3d:active {
+      box-shadow: 0 2px 0 #D63353, 0 4px 10px rgba(255, 94, 126, 0.4);
+    }
+    .btn-green-3d {
+      background-color: #22C55E;
+      box-shadow: 0 6px 0 #15803D, 0 10px 18px rgba(34, 197, 94, 0.35);
+    }
+    .btn-green-3d:active {
+      box-shadow: 0 2px 0 #15803D, 0 4px 8px rgba(34, 197, 94, 0.35);
+    }
+
+    /* Worksheet border simulation with high-res styling */
+    .card-board {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+      border: 4px solid #E2E8F0;
+      border-radius: 32px;
+      box-shadow: 0 20px 45px -10px rgba(100, 116, 139, 0.15), 0 0 0 2px rgba(255, 255, 255, 0.9) inset;
+    }
+    @media (min-width: 768px) {
+      .card-board {
+        border-width: 6px;
+        border-radius: 40px;
+        box-shadow: 0 24px 50px -10px rgba(100, 116, 139, 0.18), 0 0 0 3px rgba(255, 255, 255, 0.9) inset;
+      }
+    }
+
+    /* Choice circle button - Responsive & iPad friendly */
+    .circle-choice {
+      width: 64px;
+      height: 64px;
+      border-radius: 9999px;
+      border: 3px solid #CBD5E1;
+      font-weight: 900;
+      font-size: 1.85rem;
+      background: white;
+      color: #334155;
+      box-shadow: 0 4px 0 #94A3B8, 0 6px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.12s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+      touch-action: manipulation;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    @media (min-width: 640px) {
+      .circle-choice {
+        width: 76px;
+        height: 76px;
+        font-size: 2.2rem;
+        box-shadow: 0 5px 0 #94A3B8, 0 8px 16px rgba(0, 0, 0, 0.06);
+      }
+    }
+    @media (min-width: 768px) {
+      .circle-choice {
+        width: 88px;
+        height: 88px;
+        font-size: 2.6rem;
+        border-width: 4px;
+        box-shadow: 0 6px 0 #94A3B8, 0 10px 20px rgba(0, 0, 0, 0.07);
+      }
+    }
+    @media (min-width: 1024px) {
+      .circle-choice {
+        width: 96px;
+        height: 96px;
+        font-size: 3rem;
+        border-width: 5px;
+        box-shadow: 0 7px 0 #94A3B8, 0 12px 24px rgba(0, 0, 0, 0.08);
+      }
+    }
+    .circle-choice:active {
+      transform: scale(0.92);
+      box-shadow: 0 2px 0 #94A3B8;
+    }
+    .circle-choice.selected-correct {
+      background: #4ADE80 !important;
+      color: white !important;
+      border-color: #16A34A !important;
+      box-shadow: 0 6px 0 #15803D, 0 0 25px rgba(74, 222, 128, 0.9) !important;
+      transform: scale(1.12) !important;
+    }
+    .circle-choice.selected-wrong {
+      background: #F87171 !important;
+      color: white !important;
+      border-color: #DC2626 !important;
+      box-shadow: 0 5px 0 #B91C1C !important;
+    }
+
+    /* iPad & Desktop responsive viewport expansion */
+    .app-viewport {
+      width: 100%;
+      max-width: 100%;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 12px 16px env(safe-area-inset-bottom, 20px) 16px;
+      display: flex;
+      flex-direction: column;
+    }
+    @media (min-width: 640px) {
+      .app-viewport {
+        max-width: 640px;
+      }
+    }
+    @media (min-width: 768px) {
+      .app-viewport {
+        max-width: 860px;
+        padding: 20px 28px;
+      }
+    }
+    @media (min-width: 1024px) {
+      .app-viewport {
+        max-width: 1020px;
+        padding: 24px 36px;
+      }
+    }
+
+    /* High-res object cards on the stage */
+    .stage-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, #FFFFFF, #F8FAFC);
+      border: 3px solid #E2E8F0;
+      border-radius: 20px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      position: relative;
+      touch-action: manipulation;
+      transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @media (min-width: 768px) {
+      .stage-item {
+        border-width: 4px;
+        border-radius: 28px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.07);
+      }
+    }
+    .stage-item:active {
+      transform: scale(0.92);
+    }
+    .stage-item .item-emoji {
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.12));
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="text-slate-800">
+  <canvas id="confettiCanvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
+
+  <div class="app-viewport relative flex flex-col justify-between">
+    <!-- Top Header Navigation & Status -->
+    <header id="appHeader" class="w-full flex items-center justify-between py-2 md:py-3 mb-2">
+      <button id="btnHeaderHome" class="hidden px-3.5 py-2 md:px-5 md:py-2.5 rounded-full bg-white/90 shadow border border-slate-200 text-slate-700 font-extrabold text-sm md:text-base flex items-center gap-1.5 active:scale-95 transition">
+        <span>🏠</span> <span>Trang chủ</span>
+      </button>
+      <div id="headerTitle" class="text-xl md:text-2xl font-black text-indigo-700 tracking-wide font-cute">
+        KidsLogic 🌟
+      </div>
+      <div class="flex items-center gap-2 md:gap-3">
+        <div class="flex items-center bg-amber-100 border border-amber-300 px-3.5 py-1.5 md:px-4 md:py-2 rounded-full text-amber-800 font-black text-sm md:text-base shadow-sm">
+          <span>⭐</span>
+          <span id="headerTotalStars" class="ml-1.5">0</span>
+        </div>
+        <button id="btnSoundToggle" class="w-9 h-9 md:w-11 md:h-11 rounded-full bg-white shadow border border-slate-200 flex items-center justify-center text-lg active:scale-90 transition">
+          🔊
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Screens Container -->
+    <main id="mainContainer" class="flex-1 flex flex-col justify-center">
+
+      <!-- ================= 1. HOME SCREEN ================= -->
+      <section id="screenHome" class="flex flex-col items-center justify-center text-center py-4 md:py-8 space-y-6 md:space-y-8">
+        <div class="relative animate-float">
+          <div class="w-36 h-36 md:w-48 md:h-48 bg-gradient-to-tr from-amber-300 via-pink-400 to-indigo-400 rounded-full flex items-center justify-center shadow-xl border-4 md:border-6 border-white p-2">
+            <span class="text-7xl md:text-8xl filter drop-shadow animate-wobble">🦊</span>
+          </div>
+          <div class="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-900 text-xs md:text-sm font-black px-3.5 py-1 md:px-4 md:py-1.5 rounded-full border-2 border-white shadow">
+            Cáo Con
+          </div>
+        </div>
+
+        <div>
+          <h1 class="text-4xl md:text-6xl font-black text-indigo-900 tracking-tight font-cute drop-shadow-sm">
+            Khoanh Tròn Số
+          </h1>
+          <p class="text-slate-600 font-bold mt-2 text-base md:text-xl">
+            Bé Tập Đếm & Rèn Luyện Tư Duy Logic 🎨
+          </p>
+        </div>
+
+        <!-- Mascot Speech Bubble -->
+        <div class="bg-white/95 border-2 md:border-3 border-indigo-200 px-6 py-3.5 rounded-2xl md:rounded-3xl shadow-md max-w-sm md:max-w-md relative animate-bounce-in">
+          <p id="homeMascotQuote" class="text-indigo-950 font-bold text-sm md:text-base leading-relaxed">
+            "Chào bé yêu! Cùng Cáo Con đếm đồ vật và nhận thật nhiều sao nhé! ⭐"
+          </p>
+          <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white/95 rotate-45 border-t-2 border-l-2 border-indigo-200"></div>
+        </div>
+
+        <!-- Actions -->
+        <div class="w-full max-w-xs md:max-w-md space-y-3.5 pt-2">
+          <button id="btnStartGame" class="w-full py-4 md:py-5 rounded-2xl md:rounded-3xl text-white font-black text-xl md:text-2xl tracking-wider btn-3d btn-primary-3d flex items-center justify-center gap-2">
+            <span>🚀</span> <span>CHƠI NGAY</span>
+          </button>
+          
+          <button id="btnBadgesView" class="w-full py-3.5 md:py-4 rounded-2xl md:rounded-3xl bg-white border-2 border-amber-300 text-amber-700 font-black text-base md:text-lg shadow hover:bg-amber-50 active:scale-95 transition flex items-center justify-center gap-2">
+            <span>🏆</span> <span>Huy Hiệu Của Bé</span>
+          </button>
+        </div>
+
+        <!-- Mini stats footer -->
+        <div class="grid grid-cols-2 gap-4 w-full max-w-xs md:max-w-md pt-2">
+          <div class="bg-white/80 p-3 md:p-4 rounded-2xl border border-white text-center shadow-sm">
+            <div class="text-xs md:text-sm text-slate-500 font-bold">Điểm Cao</div>
+            <div id="homeHighScore" class="text-xl md:text-2xl font-black text-indigo-600">0</div>
+          </div>
+          <div class="bg-white/80 p-3 md:p-4 rounded-2xl border border-white text-center shadow-sm">
+            <div class="text-xs md:text-sm text-slate-500 font-bold">Huy Hiệu Đạt</div>
+            <div id="homeBadgeCount" class="text-xl md:text-2xl font-black text-emerald-600">0 / 8</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 2. MODE SELECT SCREEN ================= -->
+      <section id="screenModeSelect" class="hidden flex-col py-2 space-y-4 md:space-y-6">
+        <div class="flex items-center justify-between">
+          <button id="btnBackToHome" class="p-2.5 md:p-3 rounded-full bg-white shadow border border-slate-200 active:scale-90 transition text-lg">
+            ⬅️
+          </button>
+          <div class="text-center">
+            <h2 class="text-2xl md:text-4xl font-black text-indigo-900 font-cute">Chọn Trò Chơi</h2>
+            <p class="text-xs md:text-sm text-slate-500 font-bold mt-0.5">Bé muốn thử thách trò nào nào?</p>
+          </div>
+          <div class="w-8 md:w-12"></div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 md:gap-5 pt-1" id="modeGrid">
+          <!-- Modes injected dynamically by JS -->
+        </div>
+      </section>
+
+      <!-- ================= 3. LEVEL SELECT SCREEN ================= -->
+      <section id="screenLevelSelect" class="hidden flex-col py-3 space-y-5 md:space-y-6">
+        <div class="flex items-center justify-between">
+          <button id="btnBackToModes" class="p-2.5 md:p-3 rounded-full bg-white shadow border border-slate-200 active:scale-90 transition text-lg">
+            ⬅️
+          </button>
+          <div class="text-center">
+            <h2 id="levelSelectModeTitle" class="text-2xl md:text-4xl font-black text-indigo-900 font-cute">Khoanh Tròn Số</h2>
+            <p id="levelSelectModeDesc" class="text-xs md:text-sm text-slate-500 font-bold mt-0.5">Chọn cấp độ phù hợp cho bé</p>
+          </div>
+          <div class="w-8 md:w-12"></div>
+        </div>
+
+        <div class="space-y-3.5 md:space-y-4" id="levelCardsList">
+          <!-- 5 Levels injected dynamically -->
+        </div>
+      </section>
+
+      <!-- ================= 4. GAME PLAY SCREEN ================= -->
+      <section id="screenGamePlay" class="hidden flex-col flex-1 justify-between py-1 space-y-3 md:space-y-5">
+        <!-- Top Game Bar -->
+        <div class="flex items-center justify-between bg-white/90 backdrop-blur rounded-2xl md:rounded-3xl p-3 md:p-4 shadow-sm border border-slate-100">
+          <button id="btnPauseOrExit" class="px-3 py-1.5 md:px-4 md:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs md:text-sm font-black text-slate-600 active:scale-90 transition">
+            ✕ Thoát
+          </button>
+
+          <!-- Question Progress indicator -->
+          <div class="flex-1 px-4 md:px-8">
+            <div class="flex justify-between text-xs md:text-sm font-black text-slate-500 mb-1.5">
+              <span id="questionStepLabel">Câu 1/12</span>
+              <span id="streakIndicator" class="hidden text-orange-500 flex items-center font-black">🔥 x<span id="streakCount">0</span></span>
+            </div>
+            <div class="w-full bg-slate-200 h-3 md:h-4 rounded-full overflow-hidden">
+              <div id="gameProgressBar" class="h-full bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full transition-all duration-300" style="width: 8.33%;"></div>
+            </div>
+          </div>
+
+          <!-- Points -->
+          <div class="bg-indigo-50 border border-indigo-200 px-3.5 py-1.5 md:px-5 md:py-2 rounded-xl md:rounded-2xl text-center">
+            <span class="text-[10px] md:text-xs font-bold text-indigo-400 block -mb-0.5">ĐIỂM</span>
+            <span id="gameCurrentScore" class="text-base md:text-xl font-black text-indigo-700">0</span>
+          </div>
+        </div>
+
+        <!-- Timer Bar (if active) -->
+        <div id="timerContainer" class="hidden w-full bg-amber-100 h-2.5 md:h-3.5 rounded-full overflow-hidden border border-amber-300">
+          <div id="timerBar" class="h-full bg-amber-500 rounded-full transition-all duration-100 w-full"></div>
+        </div>
+
+        <!-- Question Prompt / Sheet Title -->
+        <div class="text-center px-2">
+          <div id="gamePromptSub" class="text-xs md:text-sm uppercase tracking-wider font-extrabold text-indigo-500">
+            Khoanh Tròn Số Đúng
+          </div>
+          <h3 id="gamePromptMain" class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-slate-800 font-cute mt-1">
+            Đếm số lượng và chọn số đúng bên dưới:
+          </h3>
+        </div>
+
+        <!-- The Worksheet Card Area (Larger & Scaled on iPad) -->
+        <div id="gameWorksheetCard" class="card-board flex-1 p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center relative min-h-[260px] sm:min-h-[320px] md:min-h-[420px] lg:min-h-[460px]">
+          <!-- Object Display Stage -->
+          <div id="gameStage" class="w-full flex-1 flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6 p-2">
+            <!-- Dynamic elements will be inserted here -->
+          </div>
+
+          <!-- Floating Mascot Helper -->
+          <div id="gameMascotBubble" class="absolute -top-4 right-4 bg-indigo-600 text-white text-xs md:text-sm font-black px-4 py-1.5 rounded-full shadow-md animate-bounce-in">
+            Cùng đếm nhé! 👀
+          </div>
+        </div>
+
+        <!-- Bottom Answer Choices Zone -->
+        <div id="gameChoiceZone" class="w-full pt-1 pb-2">
+          <div id="choiceContainer" class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-5">
+            <!-- Dynamic number circles or options injected here -->
+          </div>
+          <!-- Audio pronounce button -->
+          <div class="flex justify-center mt-3">
+            <button id="btnReadPrompt" class="text-xs md:text-sm font-bold text-slate-600 bg-white/80 px-4 py-1.5 md:py-2 rounded-full border border-slate-200 shadow-sm flex items-center gap-1.5 active:scale-95 transition">
+              <span>🗣️</span> <span>Nghe lại câu hỏi</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 5. LEVEL COMPLETE SCREEN ================= -->
+      <section id="screenLevelComplete" class="hidden flex-col items-center justify-center text-center py-4 md:py-8 space-y-5 md:space-y-7">
+        <div class="relative animate-bounce-in">
+          <div class="text-7xl md:text-8xl animate-wobble">🏆</div>
+          <div class="absolute -top-2 -right-4 bg-red-500 text-white font-black text-xs md:text-sm px-3 py-1 rounded-full border-2 border-white shadow">
+            Hoàn Thành!
+          </div>
+        </div>
+
+        <div>
+          <h2 class="text-3xl md:text-5xl font-black text-indigo-900 font-cute">Bé Thật Giỏi! 🎉</h2>
+          <p id="levelCompleteSub" class="text-slate-600 font-bold mt-1.5 text-sm md:text-lg">Bé đã vượt qua bài tập xuất sắc</p>
+        </div>
+
+        <!-- Star rating presentation -->
+        <div class="flex items-center justify-center gap-3 py-2" id="completeStarRow">
+          <span class="text-5xl md:text-7xl star-1 transition transform duration-500">⭐</span>
+          <span class="text-6xl md:text-8xl star-2 transition transform duration-500 scale-110">⭐</span>
+          <span class="text-5xl md:text-7xl star-3 transition transform duration-500">⭐</span>
+        </div>
+
+        <!-- Score Breakdown Box -->
+        <div class="w-full max-w-xs md:max-w-md bg-white/95 rounded-2xl md:rounded-3xl p-5 md:p-6 shadow-lg border-2 border-indigo-100 space-y-3">
+          <div class="flex justify-between items-center text-sm md:text-base font-bold text-slate-600">
+            <span>Điểm đạt được:</span>
+            <span id="completeEarnedScore" class="text-xl md:text-2xl font-black text-indigo-600">120</span>
+          </div>
+          <div class="flex justify-between items-center text-sm md:text-base font-bold text-slate-600">
+            <span>Độ chính xác:</span>
+            <span id="completeAccuracy" class="text-emerald-600 font-black text-lg md:text-xl">100%</span>
+          </div>
+          <div class="flex justify-between items-center text-sm md:text-base font-bold text-slate-600">
+            <span>Chuỗi đúng liên tiếp:</span>
+            <span id="completeMaxStreak" class="text-orange-500 font-black text-lg md:text-xl">🔥 12</span>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="w-full max-w-xs md:max-w-md space-y-3">
+          <button id="btnNextLevel" class="w-full py-4 md:py-4.5 rounded-2xl md:rounded-3xl text-white font-black text-lg md:text-xl btn-3d btn-primary-3d flex items-center justify-center gap-2">
+            <span>Cấp Độ Tiếp Theo</span> <span>➡️</span>
+          </button>
+          <button id="btnReplayLevel" class="w-full py-3.5 md:py-4 rounded-2xl md:rounded-3xl bg-white border-2 border-slate-300 text-slate-700 font-black text-base active:scale-95 transition">
+            🔄 Chơi Lại Bài Này
+          </button>
+          <button id="btnReturnToModes" class="w-full py-2.5 text-slate-500 font-bold text-xs md:text-sm hover:text-slate-700">
+            Về Danh Sách Bài Tập
+          </button>
+        </div>
+      </section>
+
+      <!-- ================= 6. BADGES SCREEN ================= -->
+      <section id="screenBadges" class="hidden flex-col py-3 space-y-4 md:space-y-6">
+        <div class="flex items-center justify-between">
+          <button id="btnBackFromBadges" class="p-2.5 md:p-3 rounded-full bg-white shadow border border-slate-200 active:scale-90 transition text-lg">
+            ⬅️
+          </button>
+          <div class="text-center">
+            <h2 class="text-2xl md:text-4xl font-black text-indigo-900 font-cute">Bảng Vàng Huy Hiệu</h2>
+            <p class="text-xs md:text-sm text-slate-500 font-bold mt-0.5">Thành tích rèn luyện của bé</p>
+          </div>
+          <div class="w-8 md:w-12"></div>
+        </div>
+
+        <div id="badgesGrid" class="grid grid-cols-2 md:grid-cols-3 gap-3.5 md:gap-4 pb-4">
+          <!-- Injected dynamically -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- App Bottom Footer -->
+    <footer class="text-center py-1 text-slate-400 text-xs font-semibold">
+      KidsLogic • Học Toán & Tư Duy Tương Tác
+    </footer>
+  </div>
+
+  <!-- Sound & Application Logic Script -->
+  <script>
+    /* =======================================================================
+       1. DATA & THEME CATALOGUE
+       Based directly on the 5 'Khoanh Tròn Số' worksheets
+       ======================================================================= */
+    const THEMES = {
+      toys: [
+        { name: "Bóng tròn", emoji: "🏐", color: "blue" },
+        { name: "Ngôi sao", emoji: "⭐", color: "yellow" },
+        { name: "Bút chì", emoji: "✏️", color: "blue" },
+        { name: "Xe buýt", emoji: "🚌", color: "yellow" },
+        { name: "Bóng bay", emoji: "🎈", color: "red" },
+        { name: "Cục tẩy", emoji: "🧼", color: "blue" },
+        { name: "Gấu bông", emoji: "🧸", color: "brown" },
+        { name: "Vỏ sò", emoji: "🐚", color: "purple" },
+        { name: "Con diều", emoji: "🪁", color: "orange" },
+        { name: "Ốc sên", emoji: "🐌", color: "brown" },
+        { name: "Đồng hồ", emoji: "⏰", color: "red" }
+      ],
+      animals: [
+        { name: "Bóng đá", emoji: "⚽", color: "white" },
+        { name: "Bươm bướm", emoji: "🦋", color: "purple" },
+        { name: "Thuyền buồm", emoji: "⛵", color: "blue" },
+        { name: "Cá voi xanh", emoji: "🐳", color: "blue" },
+        { name: "Vịt vàng", emoji: "🐥", color: "yellow" },
+        { name: "Cái dù", emoji: "☂️", color: "rainbow" },
+        { name: "Bông hoa", emoji: "🌸", color: "pink" },
+        { name: "Cái trống", emoji: "🥁", color: "red" },
+        { name: "Cầu vồng", emoji: "🌈", color: "rainbow" },
+        { name: "Hộp quà", emoji: "🎁", color: "blue" }
+      ],
+      food_transport: [
+        { name: "Bánh kem", emoji: "🧁", color: "pink" },
+        { name: "Chim non", emoji: "🐦", color: "blue" },
+        { name: "Máy bay", emoji: "✈️", color: "blue" },
+        { name: "Cúc áo", emoji: "🔘", color: "blue" },
+        { name: "Xe đạp", emoji: "🚲", color: "blue" },
+        { name: "Ngôi nhà", emoji: "🏠", color: "red" },
+        { name: "Chú ong", emoji: "🐝", color: "yellow" },
+        { name: "Cây kem", emoji: "🍦", color: "yellow" },
+        { name: "Cá con", emoji: "🐠", color: "orange" }
+      ],
+      veggies_1: [
+        { name: "Cà rốt", emoji: "🥕", color: "orange" },
+        { name: "Cà tím", emoji: "🍆", color: "purple" },
+        { name: "Cà chua", emoji: "🍅", color: "red" },
+        { name: "Rau cải", emoji: "🥬", color: "green" },
+        { name: "Quả cam", emoji: "🍊", color: "orange" },
+        { name: "Bí đỏ", emoji: "🎃", color: "orange" },
+        { name: "Bắp ngô", emoji: "🌽", color: "yellow" },
+        { name: "Dâu tây", emoji: "🍓", color: "red" },
+        { name: "Hành tây", emoji: "🧅", color: "brown" },
+        { name: "Dưa leo", emoji: "🥒", color: "green" },
+        { name: "Quả chuối", emoji: "🍌", color: "yellow" }
+      ],
+      veggies_2: [
+        { name: "Khoai tây", emoji: "🥔", color: "brown" },
+        { name: "Ớt chuông", emoji: "🫑", color: "green" },
+        { name: "Ớt đỏ", emoji: "🌶️", color: "red" },
+        { name: "Đậu cô ve", emoji: "🫛", color: "green" },
+        { name: "Nấm rơm", emoji: "🍄", color: "brown" },
+        { name: "Súp lơ", emoji: "🥦", color: "green" },
+        { name: "Táo đỏ", emoji: "🍎", color: "red" },
+        { name: "Quả lê", emoji: "🍐", color: "green" }
+      ]
+    };
+
+    // Color definitions for "Đếm theo màu"
+    const COLOR_ITEMS = {
+      "đỏ": [
+        { emoji: "🍎", name: "táo đỏ" },
+        { emoji: "🍓", name: "dâu tây" },
+        { emoji: "🍅", name: "cà chua" },
+        { emoji: "🎈", name: "bóng đỏ" },
+        { emoji: "🚗", name: "ô tô đỏ" }
+      ],
+      "xanh lá": [
+        { emoji: "🥦", name: "súp lơ" },
+        { emoji: "🥒", name: "dưa chuột" },
+        { emoji: "🥬", name: "rau cải" },
+        { emoji: "🍏", name: "táo xanh" },
+        { emoji: "🐸", name: "chú ếch" }
+      ],
+      "vàng": [
+        { emoji: "🍌", name: "quả chuối" },
+        { emoji: "🌽", name: "bắp ngô" },
+        { emoji: "⭐", name: "ngôi sao" },
+        { emoji: "🐥", name: "vịt con" },
+        { emoji: "🍋", name: "quả chanh" }
+      ],
+      "cam": [
+        { emoji: "🥕", name: "cà rốt" },
+        { emoji: "🍊", name: "quả cam" },
+        { emoji: "🎃", name: "bí ngô" },
+        { emoji: "🦊", name: "chú cáo" },
+        { emoji: "🏀", name: "bóng rổ" }
+      ]
+    };
+
+    // Game modes configuration
+    const GAME_MODES = [
+      {
+        id: "count_circle",
+        title: "Khoanh Tròn Số",
+        badge: "Đếm hình",
+        desc: "Đếm số đồ vật & chọn số đúng",
+        icon: "🔢",
+        colorBg: "bg-blue-500",
+        border: "border-blue-200",
+        lightBg: "bg-blue-50"
+      },
+      {
+        id: "more_less",
+        title: "Nhiều Hơn - Ít Hơn",
+        badge: "So sánh",
+        desc: "So sánh 2 nhóm hình bên nào nhiều hơn",
+        icon: "⚖️",
+        colorBg: "bg-emerald-500",
+        border: "border-emerald-200",
+        lightBg: "bg-emerald-50"
+      },
+      {
+        id: "match_number",
+        title: "Tìm Nhóm Đúng",
+        badge: "Tìm hình",
+        desc: "Nhìn số cho trước và tìm nhóm tương ứng",
+        icon: "🎯",
+        colorBg: "bg-amber-500",
+        border: "border-amber-200",
+        lightBg: "bg-amber-50"
+      },
+      {
+        id: "sequence",
+        title: "Số Tiếp Theo",
+        badge: "Dãy số",
+        desc: "Điền số còn thiếu vào chỗ trống",
+        icon: "🧩",
+        colorBg: "bg-purple-500",
+        border: "border-purple-200",
+        lightBg: "bg-purple-50"
+      },
+      {
+        id: "color_count",
+        title: "Đếm Theo Màu",
+        badge: "Phân loại",
+        desc: "Tìm và đếm đúng đồ vật có màu chỉ định",
+        icon: "🎨",
+        colorBg: "bg-pink-500",
+        border: "border-pink-200",
+        lightBg: "bg-pink-50"
+      },
+      {
+        id: "ordering",
+        title: "Sắp Xếp Thứ Tự",
+        badge: "Logic",
+        desc: "Bấm các số từ bé đến lớn",
+        icon: "🔤",
+        colorBg: "bg-teal-500",
+        border: "border-teal-200",
+        lightBg: "bg-teal-50"
+      },
+      {
+        id: "wait_turn",
+        title: "Chờ Đến Lượt",
+        badge: "Kiên nhẫn",
+        desc: "Học cách kiên nhẫn xếp hàng & chờ đúng lượt mình",
+        icon: "⏳",
+        colorBg: "bg-rose-500",
+        border: "border-rose-200",
+        lightBg: "bg-rose-50"
+      }
+    ];
+
+    // NOTE: Levels choices dynamically adjusted to prevent missing buttons!
+    const LEVELS_CONFIG = [
+      { level: 1, name: "🌱 Bước Đầu", range: [1, 3], choices: 3, hasTimer: false, desc: "Phạm vi số từ 1 đến 3 (rất dễ)" },
+      { level: 2, name: "🌿 Khám Phá", range: [1, 5], choices: 5, hasTimer: false, desc: "Phạm vi chuẩn từ 1 đến 5 như bài tập" },
+      { level: 3, name: "🌳 Tiến Bộ", range: [1, 7], choices: 7, hasTimer: false, desc: "Nhiều đồ vật phong phú hơn từ 1 đến 7" },
+      { level: 4, name: "🌲 Thử Thách", range: [1, 8], choices: 8, hasTimer: true, time: 20, desc: "Đếm nhanh cùng đồng hồ bấm giờ (20s)" },
+      { level: 5, name: "🏔️ Siêu Trí Tuệ", range: [1, 10], choices: 10, hasTimer: true, time: 14, desc: "Phạm vi từ 1 đến 10 thử tài siêu đỉnh (14s)" }
+    ];
+
+    const BADGES = [
+      { id: "first_win", name: "Bước Khởi Đầu", icon: "🌱", desc: "Hoàn thành bài tập đầu tiên" },
+      { id: "streak_5", name: "Ngôi Sao Đếm Đúng", icon: "🔥", desc: "Đạt chuỗi 5 câu đúng liên tiếp" },
+      { id: "streak_12", name: "Bách Phát Bách Trúng", icon: "🎯", desc: "Đúng liên tiếp toàn bộ 12 câu" },
+      { id: "perfect_3star", name: "Điểm 10 Hoàn Hảo", icon: "💯", desc: "Đạt 3 sao tuyệt đối ở 1 bài tập" },
+      { id: "more_less_master", name: "Nhà Cân Đo", icon: "⚖️", desc: "Hoàn thành màn Nhiều Hơn - Ít Hơn" },
+      { id: "color_artist", name: "Mắt Tinh Tường", icon: "🎨", desc: "Hoàn thành bài Đếm Theo Màu" },
+      { id: "fast_count", name: "Nhanh Như Chớp", icon: "⚡", desc: "Vượt qua thử thách có đồng hồ đếm ngược" },
+      { id: "patient_hero", name: "Bé Kiên Nhẫn", icon: "⏳", desc: "Hoàn thành bài tập Chờ Đến Lượt" },
+      { id: "super_brain", name: "Siêu Nhân Nhí", icon: "👑", desc: "Đạt tổng cộng hơn 30 ngôi sao" }
+    ];
+
+    const MASCOT_MESSAGES = {
+      correct: [
+        "Bé giỏi quá! Đúng rồi nè! 🌟",
+        "Tuyệt vời! Cáo Con rất khen bé! 👏",
+        "Chính xác luôn! Thêm một ngôi sao nha! ⭐",
+        "Bé thông minh như một nhà toán học nhí! 🧠",
+        "Xuất sắc luôn bé ơi! Tiếp tục nào! 🎉"
+      ],
+      wrong: [
+        "Chưa đúng rồi, bé thử lại một lần nữa nha! 💪",
+        "Bé đếm lại từ từ từng hình nhé, cố lên! 👀",
+        "Gần đúng rồi, Cáo Con tin bé làm được! 🦊",
+        "Bé chạm vào từng hình để đếm nè! 👉"
+      ]
+    };
+
+    /* =======================================================================
+       2. PROCEDURAL SOUND ENGINE (Web Audio API)
+       ======================================================================= */
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.2, delay = 0) {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+
+        setTimeout(() => {
+          try {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+            gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start();
+            osc.stop(this.ctx.currentTime + duration);
+          } catch(e) {}
+        }, delay * 1000);
+      }
+
+      playClick() {
+        this.playTone(750, 'triangle', 0.05, 0.15);
+      }
+
+      playPop() {
+        this.playTone(880, 'sine', 0.08, 0.2);
+      }
+
+      playCorrect() {
+        this.playTone(523.25, 'sine', 0.12, 0.25, 0);
+        this.playTone(659.25, 'sine', 0.12, 0.25, 0.08);
+        this.playTone(783.99, 'sine', 0.14, 0.25, 0.16);
+        this.playTone(1046.50, 'sine', 0.25, 0.3, 0.24);
+      }
+
+      playWrong() {
+        this.playTone(330, 'triangle', 0.18, 0.2, 0);
+        this.playTone(260, 'triangle', 0.25, 0.2, 0.12);
+      }
+
+      playFanfare() {
+        const notes = [523, 659, 784, 1046, 784, 1046, 1318];
+        notes.forEach((freq, idx) => {
+          this.playTone(freq, 'triangle', 0.2, 0.25, idx * 0.11);
+        });
+      }
+
+      playStar() {
+        this.playTone(1318, 'sine', 0.1, 0.2, 0);
+        this.playTone(1760, 'sine', 0.2, 0.25, 0.08);
+      }
+
+      speak(text) {
+        if (!this.enabled || !('speechSynthesis' in window)) return;
+        try {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'vi-VN';
+          utterance.rate = 0.95;
+          utterance.pitch = 1.15;
+          window.speechSynthesis.speak(utterance);
+        } catch(e) {}
+      }
+    }
+
+    /* =======================================================================
+       3. CONFETTI SYSTEM (HTML5 Canvas)
+       ======================================================================= */
+    class ConfettiEffect {
+      constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+        this.loop = this.loop.bind(this);
+        requestAnimationFrame(this.loop);
+      }
+
+      resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      }
+
+      fire(count = 35) {
+        const colors = ['#FF5E7E', '#4ADE80', '#FBBF24', '#38BDF8', '#A855F7', '#FB923C'];
+        const startX = this.canvas.width / 2;
+        const startY = this.canvas.height / 3;
+
+        for (let i = 0; i < count; i++) {
+          this.particles.push({
+            x: startX + (Math.random() - 0.5) * 120,
+            y: startY + (Math.random() - 0.5) * 60,
+            vx: (Math.random() - 0.5) * 14,
+            vy: (Math.random() - 0.8) * 14 - 3,
+            size: Math.random() * 10 + 6,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            rotation: Math.random() * 360,
+            vRot: (Math.random() - 0.5) * 10,
+            life: 1,
+            decay: Math.random() * 0.02 + 0.012
+          });
+        }
+      }
+
+      loop() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const p = this.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.35;
+          p.rotation += p.vRot;
+          p.life -= p.decay;
+
+          if (p.life <= 0) {
+            this.particles.splice(i, 1);
+            continue;
+          }
+
+          this.ctx.save();
+          this.ctx.translate(p.x, p.y);
+          this.ctx.rotate((p.rotation * Math.PI) / 180);
+          this.ctx.globalAlpha = p.life;
+          this.ctx.fillStyle = p.color;
+          this.ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+          this.ctx.restore();
+        }
+        requestAnimationFrame(this.loop);
+      }
+    }
+
+    /* =======================================================================
+       4. STORAGE MANAGER
+       ======================================================================= */
+    class StorageManager {
+      static KEY = 'KIDSLOGIC_PROGRESS_V1';
+
+      static load() {
+        try {
+          const raw = localStorage.getItem(StorageManager.KEY);
+          if (raw) return JSON.parse(raw);
+        } catch(e) {}
+        return {
+          progress: {},
+          badges: [],
+          totalScore: 0,
+          totalStars: 0
+        };
+      }
+
+      static save(data) {
+        try {
+          localStorage.setItem(StorageManager.KEY, JSON.stringify(data));
+        } catch(e) {}
+      }
+    }
+
+    /* =======================================================================
+       5. MAIN APPLICATION CONTROLLER
+       ======================================================================= */
+    class KidsLogicApp {
+      constructor() {
+        this.sound = new SoundEngine();
+        this.confetti = new ConfettiEffect('confettiCanvas');
+        this.data = StorageManager.load();
+
+        // Current Session State
+        this.currentMode = null;
+        this.currentLevel = null;
+        this.currentQuestionIdx = 0;
+        this.totalQuestions = 12;
+        this.currentScore = 0;
+        this.currentStreak = 0;
+        this.maxStreak = 0;
+        this.attemptCount = 0;
+        this.currentStarsSum = 0;
+        this.questionsList = [];
+        this.activeTimer = null;
+        this.timerRemaining = 0;
+
+        // Anti-double-click / double-touch lock guard
+        this.isProcessingAnswer = false;
+        this.waitTurnTimeouts = [];
+
+        this.initDomElements();
+        this.bindEvents();
+        this.updateHeaderStats();
+        this.renderBadgesScreen();
+        this.showScreen('screenHome');
+      }
+
+      initDomElements() {
+        this.screens = {
+          home: document.getElementById('screenHome'),
+          modeSelect: document.getElementById('screenModeSelect'),
+          levelSelect: document.getElementById('screenLevelSelect'),
+          gamePlay: document.getElementById('screenGamePlay'),
+          levelComplete: document.getElementById('screenLevelComplete'),
+          badges: document.getElementById('screenBadges')
+        };
+
+        this.header = {
+          title: document.getElementById('headerTitle'),
+          btnHome: document.getElementById('btnHeaderHome'),
+          totalStars: document.getElementById('headerTotalStars'),
+          btnSound: document.getElementById('btnSoundToggle')
+        };
+
+        this.gameUI = {
+          stepLabel: document.getElementById('questionStepLabel'),
+          progressBar: document.getElementById('gameProgressBar'),
+          streakContainer: document.getElementById('streakIndicator'),
+          streakCount: document.getElementById('streakCount'),
+          score: document.getElementById('gameCurrentScore'),
+          promptSub: document.getElementById('gamePromptSub'),
+          promptMain: document.getElementById('gamePromptMain'),
+          stage: document.getElementById('gameStage'),
+          choiceContainer: document.getElementById('choiceContainer'),
+          mascotBubble: document.getElementById('gameMascotBubble'),
+          timerContainer: document.getElementById('timerContainer'),
+          timerBar: document.getElementById('timerBar'),
+          btnReadPrompt: document.getElementById('btnReadPrompt'),
+          btnExit: document.getElementById('btnPauseOrExit')
+        };
+      }
+
+      bindEvents() {
+        // Sound toggle
+        this.header.btnSound.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.enabled = !this.sound.enabled;
+          this.header.btnSound.textContent = this.sound.enabled ? '🔊' : '🔇';
+          if (this.sound.enabled) this.sound.playClick();
+        });
+
+        // Header Home button
+        this.header.btnHome.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          this.stopTimer();
+          this.showScreen('screenHome');
+        });
+
+        // Home Buttons
+        document.getElementById('btnStartGame').addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          this.openModeSelect();
+        });
+
+        document.getElementById('btnBadgesView').addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          this.renderBadgesScreen();
+          this.showScreen('screenBadges');
+        });
+
+        // Back buttons
+        document.getElementById('btnBackToHome').addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          this.showScreen('screenHome');
+        });
+
+        document.getElementById('btnBackToModes').addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          this.openModeSelect();
+        });
+
+        document.getElementById('btnBackFromBadges').addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          this.showScreen('screenHome');
+        });
+
+        // In-game Exit
+        this.gameUI.btnExit.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          if (confirm('Bé có muốn dừng bài tập này để chọn bài khác không?')) {
+            this.stopTimer();
+            this.openLevelSelect(this.currentMode);
+          }
+        });
+
+        // Re-read prompt
+        this.gameUI.btnReadPrompt.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          const q = this.questionsList[this.currentQuestionIdx];
+          if (q && q.audioText) {
+            this.sound.speak(q.audioText);
+          }
+        });
+
+        // Level Complete Buttons
+        document.getElementById('btnReplayLevel').addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          this.startLevel(this.currentMode, this.currentLevel);
+        });
+
+        document.getElementById('btnNextLevel').addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          const nextLvlNum = this.currentLevel.level + 1;
+          const nextLvl = LEVELS_CONFIG.find(l => l.level === nextLvlNum);
+          if (nextLvl) {
+            this.startLevel(this.currentMode, nextLvl);
+          } else {
+            this.openModeSelect();
+          }
+        });
+
+        document.getElementById('btnReturnToModes').addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          this.openModeSelect();
+        });
+      }
+
+      showScreen(screenKey) {
+        Object.keys(this.screens).forEach(key => {
+          if (key === screenKey || `screen${key.charAt(0).toUpperCase() + key.slice(1)}` === screenKey) {
+            this.screens[key].classList.remove('hidden');
+            this.screens[key].classList.add('flex');
+          } else {
+            this.screens[key].classList.add('hidden');
+            this.screens[key].classList.remove('flex');
+          }
+        });
+
+        if (screenKey === 'screenHome') {
+          this.header.btnHome.classList.add('hidden');
+        } else {
+          this.header.btnHome.classList.remove('hidden');
+        }
+      }
+
+      updateHeaderStats() {
+        let stars = 0;
+        let score = 0;
+        Object.values(this.data.progress).forEach(p => {
+          stars += (p.stars || 0);
+          score += (p.bestScore || 0);
+        });
+        this.data.totalStars = stars;
+        this.data.totalScore = score;
+        this.header.totalStars.textContent = stars;
+
+        document.getElementById('homeHighScore').textContent = score;
+        document.getElementById('homeBadgeCount').textContent = `${this.data.badges.length} / ${BADGES.length}`;
+        StorageManager.save(this.data);
+      }
+
+      /* -------------------------------------------------------------------
+         MODES & LEVEL SELECTION SCREENS
+         ------------------------------------------------------------------- */
+      openModeSelect() {
+        const grid = document.getElementById('modeGrid');
+        grid.innerHTML = '';
+
+        GAME_MODES.forEach(mode => {
+          const card = document.createElement('div');
+          card.className = `p-4 md:p-5 rounded-2xl md:rounded-3xl bg-white border-2 ${mode.border} shadow-sm hover:shadow-md cursor-pointer transition active:scale-95 flex flex-col justify-between`;
+          card.innerHTML = `
+            <div>
+              <div class="flex items-center justify-between mb-2 md:mb-3">
+                <span class="text-3xl md:text-5xl">${mode.icon}</span>
+                <span class="text-[10px] md:text-xs font-black uppercase tracking-wider px-2.5 py-1 rounded-full ${mode.lightBg} text-slate-700">
+                  ${mode.badge}
+                </span>
+              </div>
+              <h4 class="font-black text-slate-800 text-base md:text-lg font-cute leading-snug">${mode.title}</h4>
+              <p class="text-xs md:text-sm text-slate-500 font-semibold mt-1 leading-relaxed">${mode.desc}</p>
+            </div>
+            <div class="mt-3.5 flex items-center justify-between text-xs md:text-sm font-black text-indigo-600">
+              <span>Bắt đầu ➔</span>
+            </div>
+          `;
+          card.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.sound.playClick();
+            this.openLevelSelect(mode);
+          });
+          grid.appendChild(card);
+        });
+
+        this.showScreen('screenModeSelect');
+      }
+
+      openLevelSelect(mode) {
+        this.currentMode = mode;
+        document.getElementById('levelSelectModeTitle').textContent = mode.title;
+        document.getElementById('levelSelectModeDesc').textContent = mode.desc;
+
+        const list = document.getElementById('levelCardsList');
+        list.innerHTML = '';
+
+        LEVELS_CONFIG.forEach((lvl, idx) => {
+          const key = `${mode.id}_${lvl.level}`;
+          const progress = this.data.progress[key] || { completed: false, stars: 0, bestScore: 0 };
+          const isUnlocked = idx === 0 || this.data.progress[`${mode.id}_${lvl.level - 1}`]?.completed;
+
+          const card = document.createElement('div');
+          card.className = `p-4 md:p-5 rounded-2xl md:rounded-3xl border-2 transition ${
+            isUnlocked 
+              ? 'bg-white border-slate-200 shadow-sm active:scale-98 cursor-pointer' 
+              : 'bg-slate-100/80 border-slate-200 opacity-60 cursor-not-allowed'
+          } flex items-center justify-between`;
+
+          let starsHtml = '';
+          for (let s = 1; s <= 3; s++) {
+            starsHtml += `<span class="${s <= progress.stars ? 'text-amber-400' : 'text-slate-300'} text-lg md:text-2xl">⭐</span>`;
+          }
+
+          card.innerHTML = `
+            <div class="flex items-center gap-3 md:gap-4">
+              <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center font-black text-xl md:text-3xl ${
+                isUnlocked ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-200 text-slate-400'
+              }">
+                ${isUnlocked ? lvl.level : '🔒'}
+              </div>
+              <div>
+                <h4 class="font-black text-slate-800 text-base md:text-xl">${lvl.name}</h4>
+                <p class="text-xs md:text-sm text-slate-500 font-bold">${lvl.desc}</p>
+              </div>
+            </div>
+            <div class="flex flex-col items-end gap-1">
+              <div class="flex">${starsHtml}</div>
+              <span class="text-xs md:text-sm font-black ${progress.completed ? 'text-emerald-600' : 'text-slate-400'}">
+                ${progress.completed ? `Điểm: ${progress.bestScore}` : (isUnlocked ? 'Chưa chơi' : 'Khóa')}
+              </span>
+            </div>
+          `;
+
+          if (isUnlocked) {
+            card.addEventListener('click', (e) => {
+              e.stopPropagation();
+              this.sound.playClick();
+              this.startLevel(mode, lvl);
+            });
+          }
+          list.appendChild(card);
+        });
+
+        this.showScreen('screenLevelSelect');
+      }
+
+      /* -------------------------------------------------------------------
+         GAME INITIALIZATION & GENERATION
+         ------------------------------------------------------------------- */
+      startLevel(mode, level) {
+        this.currentMode = mode;
+        this.currentLevel = level;
+        this.currentQuestionIdx = 0;
+        this.currentScore = 0;
+        this.currentStreak = 0;
+        this.maxStreak = 0;
+        this.currentStarsSum = 0;
+        this.isProcessingAnswer = false;
+        this.questionsList = this.generateQuestions(mode, level, this.totalQuestions);
+
+        this.showScreen('screenGamePlay');
+        this.renderQuestion();
+      }
+
+      generateQuestions(mode, level, count) {
+        const questions = [];
+        const [minNum, maxNum] = level.range;
+
+        const allPools = [
+          THEMES.toys,
+          THEMES.animals,
+          THEMES.food_transport,
+          THEMES.veggies_1,
+          THEMES.veggies_2
+        ];
+
+        for (let i = 0; i < count; i++) {
+          const pool = allPools[i % allPools.length];
+          const item = pool[Math.floor(Math.random() * pool.length)];
+
+          switch(mode.id) {
+            case 'count_circle': {
+              const targetCount = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+              questions.push({
+                type: 'count_circle',
+                count: targetCount,
+                item: item,
+                promptSub: "Khoanh Tròn Số Đúng",
+                promptMain: `Đếm có bao nhiêu ${item.name} và bấm vào số đúng:`,
+                audioText: `Đếm có bao nhiêu ${item.name}?`
+              });
+              break;
+            }
+
+            case 'more_less': {
+              let c1 = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+              let c2 = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+              while (c1 === c2) {
+                c2 = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+              }
+              const askMore = Math.random() > 0.5;
+              const item2 = pool[(pool.indexOf(item) + 2) % pool.length];
+              questions.push({
+                type: 'more_less',
+                groupA: { count: c1, item: item },
+                groupB: { count: c2, item: item2 },
+                askMore: askMore,
+                correctChoice: (askMore ? (c1 > c2 ? 'A' : 'B') : (c1 < c2 ? 'A' : 'B')),
+                promptSub: "So Sánh Số Lượng",
+                promptMain: askMore ? "Bên nào có NHIỀU HƠN? (Bé hãy bấm vào nhóm đó)" : "Bên nào có ÍT HƠN? (Bé hãy bấm vào nhóm đó)",
+                audioText: askMore ? "Bên nào có nhiều hơn?" : "Bên nào có ít hơn?"
+              });
+              break;
+            }
+
+            case 'match_number': {
+              const target = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+              const optionsCount = [target];
+              while (optionsCount.length < 3) {
+                const rnd = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+                if (!optionsCount.includes(rnd)) optionsCount.push(rnd);
+              }
+              this.shuffleArray(optionsCount);
+              questions.push({
+                type: 'match_number',
+                targetNumber: target,
+                optionsCount: optionsCount,
+                item: item,
+                promptSub: "Tìm Nhóm Tương Ứng",
+                promptMain: `Tìm nhóm có đúng ${target} ${item.name}:`,
+                audioText: `Tìm nhóm có đúng ${target} ${item.name}`
+              });
+              break;
+            }
+
+            case 'sequence': {
+              const start = Math.floor(Math.random() * Math.max(1, (maxNum - 3))) + 1;
+              const seq = [start, start + 1, start + 2, start + 3];
+              const missingIdx = Math.floor(Math.random() * seq.length);
+              const answer = seq[missingIdx];
+              questions.push({
+                type: 'sequence',
+                sequence: seq,
+                missingIdx: missingIdx,
+                answer: answer,
+                promptSub: "Dãy Số Kỳ Diệu",
+                promptMain: "Tìm số còn thiếu điền vào dấu hỏi chấm (?) nè bé:",
+                audioText: "Số nào còn thiếu ở dấu hỏi chấm?"
+              });
+              break;
+            }
+
+            case 'color_count': {
+              const colorKeys = Object.keys(COLOR_ITEMS);
+              const targetColor = colorKeys[Math.floor(Math.random() * colorKeys.length)];
+              const targetItem = COLOR_ITEMS[targetColor][0];
+
+              const targetCount = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+              const otherColors = colorKeys.filter(c => c !== targetColor);
+              const otherColor = otherColors[Math.floor(Math.random() * otherColors.length)];
+              const otherItem = COLOR_ITEMS[otherColor][0];
+              const otherCount = Math.floor(Math.random() * 3) + 1;
+
+              questions.push({
+                type: 'color_count',
+                targetColor: targetColor,
+                targetItem: targetItem,
+                otherItem: otherItem,
+                targetCount: targetCount,
+                otherCount: otherCount,
+                promptSub: "Phân Biệt Màu Sắc",
+                promptMain: `Có bao nhiêu vật màu ${targetColor.toUpperCase()} (${targetItem.emoji})?`,
+                audioText: `Có bao nhiêu vật màu ${targetColor}?`
+              });
+              break;
+            }
+
+            case 'ordering': {
+              // Alternate between Ascending (Bé -> Lớn) and Descending (Lớn -> Bé) for rich variety
+              const isAscending = (i % 2 === 0);
+              const countNumbers = level.level === 1 ? 3 : (level.level <= 3 ? 3 : 4);
+
+              // Avoid identical numbers across 12 questions: expand available pool to at least 5
+              const effectiveMin = minNum;
+              const effectiveMax = Math.max(maxNum, level.level === 1 ? 5 : maxNum);
+
+              const nums = [];
+              while (nums.length < countNumbers) {
+                const r = Math.floor(Math.random() * (effectiveMax - effectiveMin + 1)) + effectiveMin;
+                if (!nums.includes(r)) nums.push(r);
+              }
+
+              const sorted = [...nums].sort((a, b) => isAscending ? (a - b) : (b - a));
+
+              // Scramble order and ensure it's not already in target order
+              let scrambled = [...nums];
+              this.shuffleArray(scrambled);
+              if (scrambled.length > 1 && scrambled.every((val, idx) => val === sorted[idx])) {
+                [scrambled[0], scrambled[1]] = [scrambled[1], scrambled[0]];
+              }
+
+              const promptSub = isAscending ? "Sắp Xếp Từ Bé Đến Lớn" : "Sắp Xếp Từ Lớn Đến Bé";
+              const promptMain = isAscending
+                ? `Bé hãy xếp các số theo thứ tự từ BÉ NHẤT đến LỚN NHẤT:`
+                : `Bé hãy xếp các số theo thứ tự từ LỚN NHẤT đến BÉ NHẤT:`;
+              const audioText = isAscending
+                ? `Xếp các số từ bé đến lớn`
+                : `Xếp các số từ lớn đến bé`;
+
+              questions.push({
+                type: 'ordering',
+                numbers: scrambled,
+                sorted: sorted,
+                isAscending: isAscending,
+                item: item,
+                promptSub: promptSub,
+                promptMain: promptMain,
+                audioText: audioText
+              });
+              break;
+            }
+
+            case 'wait_turn': {
+              const scenarios = ['queue', 'traffic', 'surprise'];
+              const scenario = scenarios[i % scenarios.length];
+
+              const friends = [
+                { name: "Bạn Cún", emoji: "🐶" },
+                { name: "Bạn Thỏ", emoji: "🐰" },
+                { name: "Bạn Mèo", emoji: "🐱" },
+                { name: "Bạn Gấu", emoji: "🐻" },
+                { name: "Bạn Vịt", emoji: "🐥" },
+                { name: "Bạn Khỉ", emoji: "🐵" }
+              ];
+              this.shuffleArray(friends);
+              const friend = friends[0];
+
+              const treats = [
+                { name: "cây kem", emoji: "🍦" },
+                { name: "bánh kem", emoji: "🧁" },
+                { name: "quả bóng bay", emoji: "🎈" },
+                { name: "hộp quà", emoji: "🎁" },
+                { name: "trái dâu tây", emoji: "🍓" },
+                { name: "chiếc kẹo mút", emoji: "🍭" }
+              ];
+              const treat = treats[i % treats.length];
+
+              // Scaled waiting duration for young kids (1.8s to 3.2s)
+              const waitSeconds = 1.8 + (level.level * 0.25) + (Math.random() * 0.4);
+
+              let promptSub = "Kỹ Năng: Chờ Đến Lượt";
+              let promptMain = "";
+              let audioText = "";
+
+              if (scenario === 'queue') {
+                promptMain = `Bé hãy nhường ${friend.name} ${friend.emoji} nhận ${treat.name} trước, chờ đến lượt mình nhé!`;
+                audioText = `Bé hãy chờ đến lượt mình nhé`;
+              } else if (scenario === 'traffic') {
+                promptMain = "Đèn đỏ bé hãy dừng tay 🛑, chờ đèn xanh bật sáng hãy bấm nhận quà nhé! 🟢";
+                audioText = "Chờ đèn xanh hãy bấm";
+              } else {
+                promptMain = `Chiếc hộp thần kỳ 🎁 đang nạp năng lượng... Chờ chuông reo để mở quà nhé! 🔔`;
+                audioText = "Chờ chuông reo để nhận quà";
+              }
+
+              questions.push({
+                type: 'wait_turn',
+                scenario: scenario,
+                friend: friend,
+                treat: treat,
+                waitSeconds: waitSeconds,
+                promptSub: promptSub,
+                promptMain: promptMain,
+                audioText: audioText
+              });
+              break;
+            }
+          }
+        }
+        return questions;
+      }
+
+      shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+      }
+
+      /* -------------------------------------------------------------------
+         QUESTION RENDERING & GAMEPLAY
+         ------------------------------------------------------------------- */
+      renderQuestion() {
+        this.clearWaitTurnTimeouts();
+        // Unlock input for the new question
+        this.isProcessingAnswer = false;
+        this.gameUI.choiceContainer.style.pointerEvents = 'auto';
+        this.gameUI.stage.style.pointerEvents = 'auto';
+
+        const q = this.questionsList[this.currentQuestionIdx];
+        if (!q) return;
+
+        this.attemptCount = 0;
+        this.gameUI.stepLabel.textContent = `Câu ${this.currentQuestionIdx + 1}/${this.totalQuestions}`;
+        this.gameUI.progressBar.style.width = `${((this.currentQuestionIdx + 1) / this.totalQuestions) * 100}%`;
+        this.gameUI.score.textContent = this.currentScore;
+        this.gameUI.promptSub.textContent = q.promptSub;
+        this.gameUI.promptMain.textContent = q.promptMain;
+
+        this.gameUI.mascotBubble.textContent = "Cùng đếm nhé! 👀";
+
+        // Speak prompt automatically
+        setTimeout(() => {
+          this.sound.speak(q.audioText);
+        }, 150);
+
+        this.setupTimer();
+
+        // Clear stage and choice container
+        this.gameUI.stage.innerHTML = '';
+        this.gameUI.stage.className = 'w-full flex-1 flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6 p-2';
+        this.gameUI.choiceContainer.innerHTML = '';
+        this.gameUI.choiceContainer.className = 'flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-5';
+
+        // Render based on Question Type
+        switch (q.type) {
+          case 'count_circle':
+            this.renderCountCircleQuestion(q);
+            break;
+          case 'more_less':
+            this.renderMoreLessQuestion(q);
+            break;
+          case 'match_number':
+            this.renderMatchNumberQuestion(q);
+            break;
+          case 'sequence':
+            this.renderSequenceQuestion(q);
+            break;
+          case 'color_count':
+            this.renderColorCountQuestion(q);
+            break;
+          case 'ordering':
+            this.renderOrderingQuestion(q);
+            break;
+          case 'wait_turn':
+            this.renderWaitTurnQuestion(q);
+            break;
+        }
+      }
+
+      setupTimer() {
+        this.stopTimer();
+        if (this.currentLevel.hasTimer) {
+          this.gameUI.timerContainer.classList.remove('hidden');
+          const totalTime = this.currentLevel.time || 15;
+          this.timerRemaining = totalTime;
+          this.gameUI.timerBar.style.width = '100%';
+
+          const stepMs = 100;
+          this.activeTimer = setInterval(() => {
+            this.timerRemaining -= (stepMs / 1000);
+            const pct = Math.max(0, (this.timerRemaining / totalTime) * 100);
+            this.gameUI.timerBar.style.width = `${pct}%`;
+
+            if (this.timerRemaining <= 0) {
+              this.stopTimer();
+              this.sound.playWrong();
+              this.onAnswerSelected(false, null, "Hết giờ rồi bé ơi!");
+            }
+          }, stepMs);
+        } else {
+          this.gameUI.timerContainer.classList.add('hidden');
+        }
+      }
+
+      clearWaitTurnTimeouts() {
+        if (this.waitTurnTimeouts && this.waitTurnTimeouts.length > 0) {
+          this.waitTurnTimeouts.forEach(t => clearTimeout(t));
+          this.waitTurnTimeouts = [];
+        }
+      }
+
+      stopTimer() {
+        this.clearWaitTurnTimeouts();
+        if (this.activeTimer) {
+          clearInterval(this.activeTimer);
+          this.activeTimer = null;
+        }
+      }
+
+      /* Mode 1: Count & Circle - With High Resolution, Larger Sizes & Fixed Choice Range */
+      renderCountCircleQuestion(q) {
+        // Render emojis in large high-res cards
+        for (let i = 0; i < q.count; i++) {
+          const itemEl = document.createElement('div');
+          itemEl.className = 'stage-item w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 lg:w-32 lg:h-32 text-4xl sm:text-5xl md:text-7xl lg:text-8xl animate-pop-in';
+          itemEl.style.animationDelay = `${i * 0.04}s`;
+
+          itemEl.innerHTML = `<span class="item-emoji">${q.item.emoji}</span>`;
+
+          // Tap on individual emoji to pronounce count and pop
+          itemEl.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.sound.playPop();
+            this.sound.speak(`${i + 1}`);
+            itemEl.style.transform = 'scale(1.15)';
+            setTimeout(() => { itemEl.style.transform = ''; }, 200);
+          });
+          this.gameUI.stage.appendChild(itemEl);
+        }
+
+        // FIX BUG: Ensure the choices ALWAYS include q.count and span up to maxChoice!
+        const [minN, maxN] = this.currentLevel.range;
+        const maxChoice = Math.max(maxN, q.count, this.currentLevel.choices || 5);
+        const choices = [];
+        for (let num = 1; num <= maxChoice; num++) {
+          choices.push(num);
+        }
+
+        choices.forEach(num => {
+          const btn = document.createElement('button');
+          btn.className = 'circle-choice';
+          btn.textContent = num;
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isCorrect = (num === q.count);
+            this.onAnswerSelected(isCorrect, btn, num);
+          });
+          this.gameUI.choiceContainer.appendChild(btn);
+        });
+      }
+
+      /* Mode 2: More or Less - Large iPad Layout */
+      renderMoreLessQuestion(q) {
+        this.gameUI.stage.className = 'w-full flex-1 flex flex-col md:flex-row items-center justify-around gap-4 md:gap-8 p-1';
+
+        const createGroupBox = (group, label, choiceKey) => {
+          const box = document.createElement('div');
+          box.className = 'w-full md:flex-1 bg-white/90 p-4 md:p-6 rounded-3xl md:rounded-[36px] border-4 border-dashed border-indigo-200 flex flex-col items-center justify-center cursor-pointer active:scale-95 transition min-h-[160px] md:min-h-[300px] shadow-sm hover:border-indigo-400';
+          
+          let emojisHtml = '<div class="flex flex-wrap items-center justify-center gap-2 md:gap-4 my-2">';
+          for (let i = 0; i < group.count; i++) {
+            emojisHtml += `<span class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl filter drop-shadow-md transform hover:scale-110 transition">${group.item.emoji}</span>`;
+          }
+          emojisHtml += '</div>';
+
+          box.innerHTML = `
+            <div class="text-xs md:text-sm font-black text-indigo-700 mb-2 bg-indigo-100 px-4 py-1 rounded-full uppercase tracking-wider">Nhóm ${label}</div>
+            ${emojisHtml}
+          `;
+
+          box.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isCorrect = (choiceKey === q.correctChoice);
+            this.onAnswerSelected(isCorrect, box, `Nhóm ${label}`);
+          });
+          return box;
+        };
+
+        const boxA = createGroupBox(q.groupA, 'A', 'A');
+        const boxB = createGroupBox(q.groupB, 'B', 'B');
+
+        this.gameUI.stage.appendChild(boxA);
+        this.gameUI.stage.appendChild(boxB);
+
+        this.gameUI.choiceContainer.innerHTML = `
+          <div class="text-xs md:text-sm text-slate-500 font-black text-center py-1">
+            👉 Chạm trực tiếp vào nhóm hình mà bé chọn nhé!
+          </div>
+        `;
+      }
+
+      /* Mode 3: Match Number - Scaled on iPad */
+      renderMatchNumberQuestion(q) {
+        // Target number badge
+        const bigTarget = document.createElement('div');
+        bigTarget.className = 'w-24 h-24 md:w-36 md:h-36 rounded-full bg-gradient-to-tr from-amber-400 to-orange-500 text-white font-black text-5xl md:text-7xl flex items-center justify-center shadow-lg border-4 md:border-6 border-white mb-2 animate-bounce-in';
+        bigTarget.textContent = q.targetNumber;
+        this.gameUI.stage.appendChild(bigTarget);
+
+        // Render 3 groups as choice options
+        this.gameUI.choiceContainer.className = 'grid grid-cols-3 gap-3 md:gap-5 w-full max-w-sm md:max-w-2xl';
+        q.optionsCount.forEach(count => {
+          const btn = document.createElement('button');
+          btn.className = 'bg-white border-3 md:border-4 border-slate-300 rounded-2xl md:rounded-3xl p-3 md:p-5 flex flex-col items-center justify-center shadow-md active:scale-95 transition min-h-[90px] md:min-h-[160px]';
+          let itemsHtml = '<div class="flex flex-wrap items-center justify-center gap-1.5 md:gap-3">';
+          for (let i = 0; i < count; i++) {
+            itemsHtml += `<span class="text-2xl sm:text-3xl md:text-5xl filter drop-shadow-sm">${q.item.emoji}</span>`;
+          }
+          itemsHtml += '</div>';
+          btn.innerHTML = itemsHtml;
+
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isCorrect = (count === q.targetNumber);
+            this.onAnswerSelected(isCorrect, btn, count);
+          });
+          this.gameUI.choiceContainer.appendChild(btn);
+        });
+      }
+
+      /* Mode 4: What Comes Next (Sequence) */
+      renderSequenceQuestion(q) {
+        const seqContainer = document.createElement('div');
+        seqContainer.className = 'flex items-center justify-center gap-2 md:gap-5 flex-wrap';
+
+        q.sequence.forEach((num, idx) => {
+          const box = document.createElement('div');
+          if (idx === q.missingIdx) {
+            box.className = 'w-16 h-16 md:w-24 md:h-24 rounded-2xl md:rounded-3xl bg-purple-100 border-4 border-dashed border-purple-400 flex items-center justify-center text-3xl md:text-5xl font-black text-purple-700 animate-pulse';
+            box.textContent = '?';
+          } else {
+            box.className = 'w-16 h-16 md:w-24 md:h-24 rounded-2xl md:rounded-3xl bg-white border-2 md:border-4 border-slate-200 shadow flex items-center justify-center text-3xl md:text-5xl font-black text-slate-800';
+            box.textContent = num;
+          }
+          seqContainer.appendChild(box);
+        });
+        this.gameUI.stage.appendChild(seqContainer);
+
+        // Choices around the answer
+        const choices = [q.answer];
+        while (choices.length < 4) {
+          const offset = (Math.random() > 0.5 ? 1 : -1) * (Math.floor(Math.random() * 3) + 1);
+          const c = Math.max(1, q.answer + offset);
+          if (!choices.includes(c)) choices.push(c);
+        }
+        this.shuffleArray(choices);
+
+        choices.forEach(num => {
+          const btn = document.createElement('button');
+          btn.className = 'circle-choice';
+          btn.textContent = num;
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isCorrect = (num === q.answer);
+            this.onAnswerSelected(isCorrect, btn, num);
+          });
+          this.gameUI.choiceContainer.appendChild(btn);
+        });
+      }
+
+      /* Mode 5: Color Count - Dynamic Range Fix & Scaled Sizes */
+      renderColorCountQuestion(q) {
+        const mixedItems = [];
+        for (let i = 0; i < q.targetCount; i++) mixedItems.push({ ...q.targetItem, isTarget: true });
+        for (let i = 0; i < q.otherCount; i++) mixedItems.push({ ...q.otherItem, isTarget: false });
+        this.shuffleArray(mixedItems);
+
+        mixedItems.forEach((it, idx) => {
+          const itemEl = document.createElement('div');
+          itemEl.className = 'stage-item w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 text-4xl sm:text-5xl md:text-7xl animate-pop-in';
+          itemEl.style.animationDelay = `${idx * 0.04}s`;
+          itemEl.innerHTML = `<span class="item-emoji">${it.emoji}</span>`;
+          itemEl.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.sound.playPop();
+          });
+          this.gameUI.stage.appendChild(itemEl);
+        });
+
+        // FIX BUG: Dynamic choices up to Math.max(maxN, targetCount, 5) so answers like 6, 7 are ALWAYS available
+        const [minN, maxN] = this.currentLevel.range;
+        const maxChoice = Math.max(maxN, q.targetCount, 5);
+        for (let num = 1; num <= maxChoice; num++) {
+          const btn = document.createElement('button');
+          btn.className = 'circle-choice';
+          btn.textContent = num;
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isCorrect = (num === q.targetCount);
+            this.onAnswerSelected(isCorrect, btn, num);
+          });
+          this.gameUI.choiceContainer.appendChild(btn);
+        }
+      }
+
+      /* Mode 6: Number Ordering - Unified with all other game modes */
+      renderOrderingQuestion(q) {
+        let currentStep = 0;
+        const sortedTarget = q.sorted;
+
+        this.gameUI.stage.className = 'w-full flex-1 flex flex-col items-center justify-center p-2';
+
+        // 1. Direction Indicator Badge
+        const dirBadge = document.createElement('div');
+        dirBadge.className = `flex items-center gap-2 px-4 py-1.5 md:px-5 md:py-2 rounded-full font-black text-xs md:text-base mb-3 md:mb-5 shadow-sm border-2 ${
+          q.isAscending
+            ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+            : 'bg-amber-50 text-amber-700 border-amber-300'
+        }`;
+        dirBadge.innerHTML = `
+          <span>${q.isAscending ? '↗️ BÉ NHẤT' : '↘️ LỚN NHẤT'}</span>
+          <span class="text-slate-400">➔</span>
+          <span>${q.isAscending ? 'LỚN NHẤT' : 'BÉ NHẤT'}</span>
+        `;
+        this.gameUI.stage.appendChild(dirBadge);
+
+        // 2. Target Slots Row (Waiting to be filled in order)
+        const slotsRow = document.createElement('div');
+        slotsRow.className = 'flex items-center justify-center gap-2 sm:gap-3 md:gap-4 flex-wrap w-full';
+
+        const slotEls = [];
+        sortedTarget.forEach((targetVal, idx) => {
+          const slotWrapper = document.createElement('div');
+          slotWrapper.className = 'flex items-center gap-2 sm:gap-3 md:gap-4';
+
+          const slot = document.createElement('div');
+          slot.className = 'w-20 h-24 sm:w-24 sm:h-28 md:w-32 md:h-36 rounded-2xl md:rounded-3xl border-3 md:border-4 border-dashed border-indigo-200 bg-white/70 shadow-sm flex flex-col items-center justify-between p-2 md:p-3 transition-all duration-300';
+
+          const slotLabel = idx === 0 
+            ? (q.isAscending ? 'Bé nhất' : 'Lớn nhất') 
+            : (idx === sortedTarget.length - 1 ? (q.isAscending ? 'Lớn nhất' : 'Bé nhất') : `Thứ ${idx + 1}`);
+
+          slot.innerHTML = `
+            <span class="text-[10px] sm:text-xs md:text-sm font-black text-indigo-500 uppercase tracking-wider">${slotLabel}</span>
+            <div class="slot-content text-2xl sm:text-3xl md:text-5xl font-black text-slate-300 flex items-center justify-center flex-1">
+              <span>?</span>
+            </div>
+            <span class="text-[10px] md:text-xs font-bold text-slate-400">Ô ${idx + 1}</span>
+          `;
+          slotWrapper.appendChild(slot);
+          slotEls.push(slot);
+
+          // Add connector arrow between slots
+          if (idx < sortedTarget.length - 1) {
+            const arrow = document.createElement('span');
+            arrow.className = 'text-indigo-400 font-black text-lg md:text-3xl select-none';
+            arrow.textContent = '➔';
+            slotWrapper.appendChild(arrow);
+          }
+
+          slotsRow.appendChild(slotWrapper);
+        });
+        this.gameUI.stage.appendChild(slotsRow);
+
+        // 3. Choice Buttons in Choice Container (Consistent with all other questions!)
+        this.gameUI.choiceContainer.className = 'flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-5 w-full pt-1 pb-2';
+        this.gameUI.choiceContainer.innerHTML = '';
+
+        q.numbers.forEach(num => {
+          const btn = document.createElement('button');
+          btn.className = 'bg-white border-3 md:border-4 border-indigo-200 rounded-2xl md:rounded-3xl px-4 py-2.5 sm:px-5 sm:py-3 md:px-6 md:py-4 shadow-md hover:shadow-lg active:scale-95 transition flex flex-col items-center justify-center min-w-[76px] sm:min-w-[88px] md:min-w-[110px] cursor-pointer';
+
+          // Mini emoji visual representation for quantities
+          let miniEmojiStr = '';
+          const maxShow = Math.min(4, num);
+          for (let m = 0; m < maxShow; m++) {
+            miniEmojiStr += q.item.emoji;
+          }
+          if (num > 4) miniEmojiStr += '+';
+
+          btn.innerHTML = `
+            <span class="text-2xl sm:text-3xl md:text-4xl font-black text-indigo-900 leading-none mb-1">${num}</span>
+            <span class="text-xs sm:text-sm md:text-base filter drop-shadow-sm leading-none">${miniEmojiStr}</span>
+          `;
+
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (btn.disabled || this.isProcessingAnswer) return;
+
+            if (num === sortedTarget[currentStep]) {
+              // Correct next number
+              btn.disabled = true;
+              btn.classList.add('opacity-30', 'scale-90', 'border-emerald-300');
+              btn.style.pointerEvents = 'none';
+
+              this.sound.playCorrect();
+
+              // Update target slot in stage
+              const targetSlot = slotEls[currentStep];
+              targetSlot.className = 'w-20 h-24 sm:w-24 sm:h-28 md:w-32 md:h-36 rounded-2xl md:rounded-3xl border-3 md:border-4 border-emerald-500 bg-emerald-50 shadow-md flex flex-col items-center justify-between p-2 md:p-3 animate-pop-in';
+              targetSlot.innerHTML = `
+                <span class="text-[10px] sm:text-xs md:text-sm font-black text-emerald-700 uppercase">✓ Đúng</span>
+                <span class="text-3xl sm:text-4xl md:text-5xl font-black text-emerald-800 leading-none">${num}</span>
+                <span class="text-sm sm:text-base md:text-xl filter drop-shadow-sm">${q.item.emoji}</span>
+              `;
+
+              currentStep++;
+
+              if (currentStep === sortedTarget.length) {
+                // Completed whole sequence
+                this.onAnswerSelected(true, null, "Hoàn tất dãy số!");
+              }
+            } else {
+              // Wrong selection (not the next smallest/largest)
+              this.sound.playWrong();
+              btn.classList.add('animate-shake', 'border-red-400', 'bg-red-50');
+              setTimeout(() => {
+                btn.classList.remove('animate-shake', 'border-red-400', 'bg-red-50');
+              }, 450);
+
+              this.onAnswerSelected(false, btn, num);
+              this.gameUI.mascotBubble.textContent = q.isAscending 
+                ? "Bé tìm số nhỏ hơn nha! 💡" 
+                : "Bé tìm số lớn hơn nha! 💡";
+            }
+          });
+
+          this.gameUI.choiceContainer.appendChild(btn);
+        });
+      }
+
+      /* Mode 7: Wait a bit for your turn (Chờ Đến Lượt) */
+      renderWaitTurnQuestion(q) {
+        this.clearWaitTurnTimeouts();
+
+        this.gameUI.stage.className = 'w-full flex-1 flex flex-col items-center justify-center p-3 relative';
+        this.gameUI.choiceContainer.className = 'flex flex-col items-center justify-center w-full max-w-sm md:max-w-md mx-auto pt-1 pb-2';
+        this.gameUI.choiceContainer.innerHTML = '';
+
+        let isReady = false;
+
+        // 1. Stage Status Banner
+        const statusBanner = document.createElement('div');
+        statusBanner.className = 'flex items-center gap-2 px-5 py-2 md:px-6 md:py-2.5 rounded-full font-black text-xs sm:text-sm md:text-base mb-4 shadow-sm border-2 md:border-3 bg-amber-50 text-amber-800 border-amber-300 transition-all duration-300 animate-pulse';
+        statusBanner.innerHTML = `
+          <span>🛑</span>
+          <span class="banner-text">HÃY CHỜ MỘT CHÚT... CHƯA ĐẾN LƯỢT NHA!</span>
+          <span>⏳</span>
+        `;
+        this.gameUI.stage.appendChild(statusBanner);
+
+        // 2. Interactive Center Visual based on Scenario
+        const visualCard = document.createElement('div');
+        visualCard.className = 'w-full max-w-xs sm:max-w-sm md:max-w-md bg-white/90 rounded-3xl md:rounded-[36px] border-3 md:border-4 border-indigo-100 p-4 sm:p-5 md:p-6 shadow-md flex flex-col items-center justify-center min-h-[170px] md:min-h-[220px] transition-all duration-300';
+
+        if (q.scenario === 'queue') {
+          visualCard.innerHTML = `
+            <div class="text-xs md:text-sm font-black text-slate-500 uppercase tracking-wider mb-2">Hàng Đợi Nhận Quà</div>
+            <div class="flex items-center justify-center gap-3 sm:gap-4 md:gap-6 my-2">
+              <!-- Friend turn -->
+              <div class="friend-box flex flex-col items-center p-3 rounded-2xl bg-amber-50 border-2 border-amber-200 animate-bounce-in">
+                <span class="text-4xl sm:text-5xl md:text-6xl filter drop-shadow-sm">${q.friend.emoji}</span>
+                <span class="text-xs md:text-sm font-black text-amber-800 mt-1">${q.friend.name}</span>
+                <span class="text-[10px] md:text-xs font-bold text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full mt-1">Đang lấy ${q.treat.name}</span>
+              </div>
+              <span class="text-xl md:text-3xl font-black text-slate-300">➔</span>
+              <!-- Child turn -->
+              <div class="child-box flex flex-col items-center p-3 rounded-2xl bg-slate-50 border-2 border-dashed border-slate-300 opacity-60 transition-all duration-300">
+                <span class="text-4xl sm:text-5xl md:text-6xl filter drop-shadow-sm">🧒</span>
+                <span class="text-xs md:text-sm font-black text-slate-700 mt-1">Bé Yêu</span>
+                <span class="text-[10px] md:text-xs font-bold text-slate-500 bg-slate-200 px-2 py-0.5 rounded-full mt-1">Chờ xếp hàng...</span>
+              </div>
+            </div>
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-100 h-2.5 md:h-3.5 rounded-full overflow-hidden border border-slate-200 mt-3">
+              <div class="wait-progress h-full bg-amber-400 rounded-full transition-all ease-linear" style="width: 0%;"></div>
+            </div>
+          `;
+        } else if (q.scenario === 'traffic') {
+          visualCard.innerHTML = `
+            <div class="text-xs md:text-sm font-black text-slate-500 uppercase tracking-wider mb-2">Đèn Tín Hiệu Kiên Nhẫn</div>
+            <div class="flex items-center justify-center gap-4 md:gap-6 my-2 p-3 bg-slate-900 rounded-3xl shadow-inner border-2 border-slate-700">
+              <div class="lamp-red w-12 h-12 md:w-16 md:h-16 rounded-full bg-red-500 flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(239,68,68,0.9)] animate-pulse">🛑</div>
+              <div class="lamp-yellow w-12 h-12 md:w-16 md:h-16 rounded-full bg-yellow-500/30 flex items-center justify-center text-2xl opacity-40">🟡</div>
+              <div class="lamp-green w-12 h-12 md:w-16 md:h-16 rounded-full bg-emerald-500/30 flex items-center justify-center text-2xl opacity-40">🟢</div>
+            </div>
+            <div class="traffic-text text-xs md:text-sm font-black text-red-600 mt-2">ĐÈN ĐỎ: DỪNG TAY & CHỜ ĐỢI 🛑</div>
+          `;
+        } else {
+          visualCard.innerHTML = `
+            <div class="text-xs md:text-sm font-black text-slate-500 uppercase tracking-wider mb-1">Hộp Quà Thần Kỳ</div>
+            <div class="surprise-box text-6xl sm:text-7xl md:text-8xl my-2 animate-wobble filter drop-shadow-md cursor-default">🎁</div>
+            <div class="surprise-text text-xs md:text-sm font-black text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full mt-1">
+              ✨ Đang nạp điều ước thần kỳ... ⏳
+            </div>
+          `;
+        }
+        this.gameUI.stage.appendChild(visualCard);
+
+        // 3. Action Button in Choice Zone
+        const actionBtn = document.createElement('button');
+        actionBtn.className = 'w-full py-4 sm:py-4.5 md:py-5 px-6 rounded-2xl md:rounded-3xl border-3 md:border-4 border-amber-300 bg-amber-50 text-amber-800 font-black text-base sm:text-lg md:text-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer active:scale-95';
+        actionBtn.innerHTML = `
+          <span class="btn-icon text-xl md:text-2xl">🛑</span>
+          <span class="btn-text">Đang Chờ Đến Lượt... (Đừng bấm nha!)</span>
+        `;
+
+        actionBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (this.isProcessingAnswer) return;
+
+          if (!isReady) {
+            this.sound.playWrong();
+            actionBtn.classList.add('animate-shake', 'border-red-400', 'bg-red-100', 'text-red-700');
+            setTimeout(() => {
+              actionBtn.classList.remove('animate-shake', 'border-red-400', 'bg-red-100', 'text-red-700');
+            }, 450);
+
+            this.attemptCount++;
+            this.gameUI.mascotBubble.textContent = "Khoan đã bé ơi! Hãy chờ đến lượt nha! ⏳";
+            this.sound.speak("Bé hãy chờ một chút nhé!");
+          } else {
+            this.sound.playCorrect();
+            this.confetti.fire(45);
+            actionBtn.classList.add('selected-correct');
+            this.onAnswerSelected(true, actionBtn, "Đúng lượt!");
+          }
+        });
+
+        this.gameUI.choiceContainer.appendChild(actionBtn);
+
+        // 4. Timer Transition to Ready State
+        const totalDurationMs = Math.round(q.waitSeconds * 1000);
+
+        const progressEl = visualCard.querySelector('.wait-progress');
+        if (progressEl) {
+          const startTime = Date.now();
+          const pInterval = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            const pct = Math.min(100, (elapsed / totalDurationMs) * 100);
+            progressEl.style.width = `${pct}%`;
+            if (pct >= 100) clearInterval(pInterval);
+          }, 40);
+          this.waitTurnTimeouts.push(pInterval);
+        }
+
+        const readyTimer = setTimeout(() => {
+          isReady = true;
+          this.sound.playStar();
+
+          statusBanner.className = 'flex items-center gap-2 px-5 py-2 md:px-6 md:py-2.5 rounded-full font-black text-xs sm:text-sm md:text-base mb-4 shadow-md border-2 md:border-3 bg-emerald-50 text-emerald-800 border-emerald-400 animate-bounce-in';
+          statusBanner.innerHTML = `
+            <span>🎉</span>
+            <span class="banner-text">ĐẾN LƯỢT BÉ RỒI! HÃY BẤM NHẬN QUÀ!</span>
+            <span>🔔</span>
+          `;
+
+          if (q.scenario === 'queue') {
+            const childBox = visualCard.querySelector('.child-box');
+            if (childBox) {
+              childBox.className = 'child-box flex flex-col items-center p-3 rounded-2xl bg-emerald-100 border-3 border-emerald-500 shadow-md animate-pop-in';
+              childBox.innerHTML = `
+                <span class="text-4xl sm:text-5xl md:text-6xl filter drop-shadow-md">🧒</span>
+                <span class="text-xs md:text-sm font-black text-emerald-800 mt-1">Đến Lượt Bé!</span>
+                <span class="text-[10px] md:text-xs font-black text-white bg-emerald-600 px-2.5 py-0.5 rounded-full mt-1">Nhận ${q.treat.name} ${q.treat.emoji}</span>
+              `;
+            }
+          } else if (q.scenario === 'traffic') {
+            const lampRed = visualCard.querySelector('.lamp-red');
+            const lampGreen = visualCard.querySelector('.lamp-green');
+            const trafficText = visualCard.querySelector('.traffic-text');
+            if (lampRed && lampGreen) {
+              lampRed.className = 'lamp-red w-12 h-12 md:w-16 md:h-16 rounded-full bg-red-500/20 flex items-center justify-center text-2xl opacity-30';
+              lampGreen.className = 'lamp-green w-12 h-12 md:w-16 md:h-16 rounded-full bg-emerald-500 flex items-center justify-center text-2xl shadow-[0_0_25px_rgba(34,197,94,0.9)] animate-pulse';
+            }
+            if (trafficText) {
+              trafficText.className = 'traffic-text text-xs md:text-sm font-black text-emerald-600 mt-2';
+              trafficText.textContent = '🟢 ĐÈN XANH: ĐẾN LƯỢT RỒI! BẤM NGAY NÀO!';
+            }
+          } else {
+            const boxEl = visualCard.querySelector('.surprise-box');
+            const boxText = visualCard.querySelector('.surprise-text');
+            if (boxEl) {
+              boxEl.className = 'surprise-box text-6xl sm:text-7xl md:text-8xl my-2 filter drop-shadow-lg animate-pop-in';
+              boxEl.textContent = q.treat.emoji;
+            }
+            if (boxText) {
+              boxText.className = 'surprise-text text-xs md:text-sm font-black text-emerald-700 bg-emerald-100 px-3.5 py-1 rounded-full mt-1';
+              boxText.textContent = `🎉 BÙNG! QUÀ CỦA BÉ LÀ ${q.treat.name.toUpperCase()}!`;
+            }
+          }
+
+          actionBtn.className = 'w-full py-4 sm:py-4.5 md:py-5 px-6 rounded-2xl md:rounded-3xl btn-3d btn-green-3d text-white font-black text-lg sm:text-xl md:text-2xl shadow-xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer animate-glow active:scale-95';
+          actionBtn.innerHTML = `
+            <span class="btn-icon text-2xl md:text-3xl">🎁</span>
+            <span class="btn-text">ĐẾN LƯỢT BÉ RỒI! BẤM NHẬN QUÀ!</span>
+            <span class="text-2xl md:text-3xl">✨</span>
+          `;
+
+          this.gameUI.mascotBubble.textContent = "Đến lượt bé rồi! Mau bấm nhận quà nào! 🌟";
+          this.sound.speak("Đến lượt bé rồi!");
+        }, totalDurationMs);
+
+        this.waitTurnTimeouts.push(readyTimer);
+      }
+
+      /* -------------------------------------------------------------------
+         ANSWER HANDLING & SCORING (WITH ANTI-DOUBLE-TAP GUARD)
+         ------------------------------------------------------------------- */
+      onAnswerSelected(isCorrect, targetElement, answerValue) {
+        // FIX BUG: Prevent double touch or double click from answering or advancing twice!
+        if (this.isProcessingAnswer) return;
+
+        this.attemptCount++;
+
+        if (isCorrect) {
+          // Lock answers immediately during transition
+          this.isProcessingAnswer = true;
+          this.gameUI.choiceContainer.style.pointerEvents = 'none';
+          this.gameUI.stage.style.pointerEvents = 'none';
+
+          this.stopTimer();
+          this.sound.playCorrect();
+          this.confetti.fire(35);
+
+          if (targetElement && targetElement.classList.contains('circle-choice')) {
+            targetElement.classList.add('selected-correct');
+          }
+
+          let earnedPoints = 10;
+          let questionStars = 3;
+          if (this.attemptCount === 2) {
+            earnedPoints = 5;
+            questionStars = 2;
+          } else if (this.attemptCount >= 3) {
+            earnedPoints = 2;
+            questionStars = 1;
+          }
+
+          this.currentStreak++;
+          if (this.currentStreak > this.maxStreak) this.maxStreak = this.currentStreak;
+
+          if (this.currentStreak >= 3) {
+            earnedPoints *= 2;
+            this.gameUI.streakContainer.classList.remove('hidden');
+            this.gameUI.streakCount.textContent = this.currentStreak;
+          }
+
+          this.currentScore += earnedPoints;
+          this.currentStarsSum += questionStars;
+          this.gameUI.score.textContent = this.currentScore;
+
+          const randomCheers = MASCOT_MESSAGES.correct;
+          this.gameUI.mascotBubble.textContent = randomCheers[Math.floor(Math.random() * randomCheers.length)];
+
+          if (this.currentStreak >= 5) this.awardBadge('streak_5');
+          if (this.currentStreak >= 12) this.awardBadge('streak_12');
+          if (this.currentLevel.hasTimer) this.awardBadge('fast_count');
+
+          // Advance to next question after transition delay
+          setTimeout(() => {
+            this.currentQuestionIdx++;
+            if (this.currentQuestionIdx < this.totalQuestions) {
+              this.renderQuestion();
+            } else {
+              this.completeLevel();
+            }
+          }, 850);
+
+        } else {
+          // Wrong Answer - Brief lock to prevent spam clicking
+          this.isProcessingAnswer = true;
+          this.sound.playWrong();
+          this.currentStreak = 0;
+          this.gameUI.streakContainer.classList.add('hidden');
+
+          if (targetElement) {
+            if (targetElement.classList.contains('circle-choice')) {
+              targetElement.classList.add('selected-wrong', 'animate-shake');
+              setTimeout(() => {
+                targetElement.classList.remove('selected-wrong', 'animate-shake');
+              }, 450);
+            } else {
+              targetElement.classList.add('animate-shake');
+              setTimeout(() => targetElement.classList.remove('animate-shake'), 450);
+            }
+          }
+
+          const randomWrongs = MASCOT_MESSAGES.wrong;
+          this.gameUI.mascotBubble.textContent = randomWrongs[Math.floor(Math.random() * randomWrongs.length)];
+
+          // Release lock after shake animation finishes
+          setTimeout(() => {
+            this.isProcessingAnswer = false;
+          }, 450);
+        }
+      }
+
+      /* -------------------------------------------------------------------
+         LEVEL COMPLETION & RESULTS
+         ------------------------------------------------------------------- */
+      completeLevel() {
+        this.sound.playFanfare();
+        this.confetti.fire(120);
+
+        const avgStars = this.currentStarsSum / this.totalQuestions;
+        let finalStars = 1;
+        if (avgStars >= 2.6) finalStars = 3;
+        else if (avgStars >= 1.6) finalStars = 2;
+
+        const key = `${this.currentMode.id}_${this.currentLevel.level}`;
+        const prev = this.data.progress[key] || { stars: 0, bestScore: 0 };
+        this.data.progress[key] = {
+          completed: true,
+          stars: Math.max(prev.stars, finalStars),
+          bestScore: Math.max(prev.bestScore, this.currentScore)
+        };
+
+        this.awardBadge('first_win');
+        if (finalStars === 3) this.awardBadge('perfect_3star');
+        if (this.currentMode.id === 'more_less') this.awardBadge('more_less_master');
+        if (this.currentMode.id === 'color_count') this.awardBadge('color_artist');
+        if (this.currentMode.id === 'wait_turn') this.awardBadge('patient_hero');
+
+        this.updateHeaderStats();
+        if (this.data.totalStars >= 30) this.awardBadge('super_brain');
+
+        document.getElementById('completeEarnedScore').textContent = this.currentScore;
+        const accuracy = Math.round((this.totalQuestions / (this.totalQuestions + (this.attemptCount > this.totalQuestions ? this.attemptCount - this.totalQuestions : 0))) * 100);
+        document.getElementById('completeAccuracy').textContent = `${Math.min(100, accuracy)}%`;
+        document.getElementById('completeMaxStreak').textContent = `🔥 ${this.maxStreak}`;
+
+        const starRow = document.getElementById('completeStarRow');
+        const starSpans = starRow.querySelectorAll('span');
+        starSpans.forEach((s, idx) => {
+          s.style.opacity = '0.2';
+          s.style.transform = 'scale(0.5)';
+          if (idx < finalStars) {
+            setTimeout(() => {
+              s.style.opacity = '1';
+              s.style.transform = 'scale(1)';
+              this.sound.playStar();
+            }, (idx + 1) * 350);
+          }
+        });
+
+        const nextBtn = document.getElementById('btnNextLevel');
+        if (this.currentLevel.level >= 5) {
+          nextBtn.classList.add('hidden');
+        } else {
+          nextBtn.classList.remove('hidden');
+        }
+
+        this.showScreen('screenLevelComplete');
+      }
+
+      /* -------------------------------------------------------------------
+         ACHIEVEMENT BADGES
+         ------------------------------------------------------------------- */
+      awardBadge(badgeId) {
+        if (!this.data.badges.includes(badgeId)) {
+          this.data.badges.push(badgeId);
+          StorageManager.save(this.data);
+          this.confetti.fire(40);
+        }
+      }
+
+      renderBadgesScreen() {
+        const grid = document.getElementById('badgesGrid');
+        grid.innerHTML = '';
+
+        BADGES.forEach(badge => {
+          const isUnlocked = this.data.badges.includes(badge.id);
+          const el = document.createElement('div');
+          el.className = `p-4 md:p-5 rounded-2xl md:rounded-3xl border-2 flex items-center gap-3.5 md:gap-4 ${
+            isUnlocked ? 'bg-white border-amber-300 shadow-sm' : 'bg-slate-100 border-slate-200 opacity-60'
+          }`;
+          el.innerHTML = `
+            <div class="text-3xl md:text-5xl w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center ${
+              isUnlocked ? 'bg-amber-100 text-amber-600' : 'bg-slate-200 text-slate-400'
+            }">
+              ${isUnlocked ? badge.icon : '🔒'}
+            </div>
+            <div>
+              <h4 class="font-black text-slate-800 text-sm md:text-base">${badge.name}</h4>
+              <p class="text-xs md:text-sm text-slate-500 font-bold">${badge.desc}</p>
+            </div>
+          `;
+          grid.appendChild(el);
+        });
+      }
+    }
+
+    // Initialize application when DOM is ready
+    window.addEventListener('DOMContentLoaded', () => {
+      window.app = new KidsLogicApp();
+    });
+  </script>
+</body>
+</html>
