@@ -646,6 +646,16 @@
         lightBg: "bg-teal-50"
       },
       {
+        id: "match_connect",
+        title: "Nối Số & Hình",
+        badge: "Kéo nối",
+        desc: "Kéo tay nối số với đúng nhóm hình tương ứng",
+        icon: "🔗",
+        colorBg: "bg-orange-500",
+        border: "border-orange-200",
+        lightBg: "bg-orange-50"
+      },
+      {
         id: "wait_turn",
         title: "Chờ Đến Lượt",
         badge: "Kiên nhẫn",
@@ -673,6 +683,7 @@
       { id: "perfect_3star", name: "Điểm 10 Hoàn Hảo", icon: "💯", desc: "Đạt 3 sao tuyệt đối ở 1 bài tập" },
       { id: "more_less_master", name: "Nhà Cân Đo", icon: "⚖️", desc: "Hoàn thành màn Nhiều Hơn - Ít Hơn" },
       { id: "color_artist", name: "Mắt Tinh Tường", icon: "🎨", desc: "Hoàn thành bài Đếm Theo Màu" },
+      { id: "match_connect_hero", name: "Đôi Tay Khéo Léo", icon: "🔗", desc: "Hoàn thành bài Nối Số & Hình" },
       { id: "fast_count", name: "Nhanh Như Chớp", icon: "⚡", desc: "Vượt qua thử thách có đồng hồ đếm ngược" },
       { id: "patient_hero", name: "Bé Kiên Nhẫn", icon: "⏳", desc: "Hoàn thành bài tập Chờ Đến Lượt" },
       { id: "super_brain", name: "Siêu Nhân Nhí", icon: "👑", desc: "Đạt tổng cộng hơn 30 ngôi sao" }
@@ -1344,6 +1355,37 @@
               break;
             }
 
+            case 'match_connect': {
+              const countPairs = level.level <= 2 ? 3 : (level.level <= 4 ? 4 : 5);
+              const pairs = [];
+              const usedNums = [];
+              
+              while (pairs.length < countPairs) {
+                const n = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+                if (!usedNums.includes(n)) {
+                  usedNums.push(n);
+                  const pItem = allPools[pairs.length % allPools.length][Math.floor(Math.random() * 5)];
+                  pairs.push({ num: n, item: pItem });
+                }
+              }
+
+              const leftSide = [...pairs];
+              const rightSide = [...pairs];
+              this.shuffleArray(leftSide);
+              this.shuffleArray(rightSide);
+
+              questions.push({
+                type: 'match_connect',
+                pairs: pairs,
+                leftSide: leftSide,
+                rightSide: rightSide,
+                promptSub: "Nối Số Với Hình",
+                promptMain: "Bé hãy kéo tay nối các số với đúng nhóm hình tương ứng nhé!",
+                audioText: "Bé hãy nối số với đúng nhóm hình nhé"
+              });
+              break;
+            }
+
             case 'wait_turn': {
               const scenarios = ['queue', 'traffic', 'surprise'];
               const scenario = scenarios[i % scenarios.length];
@@ -1416,6 +1458,10 @@
          ------------------------------------------------------------------- */
       renderQuestion() {
         this.clearWaitTurnTimeouts();
+        if (this.gameUI.stage._cleanup) {
+          this.gameUI.stage._cleanup();
+          this.gameUI.stage._cleanup = null;
+        }
         // Unlock input for the new question
         this.isProcessingAnswer = false;
         this.gameUI.choiceContainer.style.pointerEvents = 'auto';
@@ -1465,6 +1511,9 @@
             break;
           case 'ordering':
             this.renderOrderingQuestion(q);
+            break;
+          case 'match_connect':
+            this.renderMatchConnectQuestion(q);
             break;
           case 'wait_turn':
             this.renderWaitTurnQuestion(q);
@@ -1824,6 +1873,174 @@
         });
       }
 
+      /* Mode 8: Match & Connect - Drag/Draw line from number to group */
+      renderMatchConnectQuestion(q) {
+        this.gameUI.stage.className = 'w-full flex-1 flex items-stretch justify-between gap-4 md:gap-8 p-1 relative overflow-hidden';
+        this.gameUI.choiceContainer.innerHTML = '<div class="text-xs md:text-sm text-slate-500 font-black text-center py-1">👉 Kéo tay nối số với đúng nhóm hình nhé!</div>';
+
+        const canvas = document.createElement('canvas');
+        canvas.className = 'absolute inset-0 pointer-events-none z-10';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        this.gameUI.stage.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+
+        const resizeCanvas = () => {
+          canvas.width = this.gameUI.stage.offsetWidth;
+          canvas.height = this.gameUI.stage.offsetHeight;
+        };
+        // Use ResizeObserver for reliability on different devices
+        const ro = new ResizeObserver(() => resizeCanvas());
+        ro.observe(this.gameUI.stage);
+        setTimeout(resizeCanvas, 0);
+
+        const leftCol = document.createElement('div');
+        leftCol.className = 'flex flex-col justify-around gap-2 z-20';
+        const rightCol = document.createElement('div');
+        rightCol.className = 'flex flex-col justify-around gap-2 z-20';
+
+        const nodes = { left: [], right: [] };
+        let activeNode = null;
+        let connections = [];
+
+        const getCenter = (el) => {
+          const rect = el.getBoundingClientRect();
+          const stageRect = this.gameUI.stage.getBoundingClientRect();
+          return {
+            x: rect.left + rect.width / 2 - stageRect.left,
+            y: rect.top + rect.height / 2 - stageRect.top
+          };
+        };
+
+        const redraw = (currentPos = null) => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+          ctx.lineWidth = 8;
+
+          connections.forEach(conn => {
+            const start = getCenter(conn.startEl);
+            const end = getCenter(conn.endEl);
+            ctx.beginPath();
+            ctx.strokeStyle = '#4ADE80';
+            ctx.moveTo(start.x, start.y);
+            ctx.lineTo(end.x, end.y);
+            ctx.stroke();
+          });
+
+          if (activeNode && currentPos) {
+            const start = getCenter(activeNode.el);
+            ctx.beginPath();
+            ctx.strokeStyle = '#6366F1';
+            ctx.setLineDash([10, 5]);
+            ctx.moveTo(start.x, start.y);
+            ctx.lineTo(currentPos.x, currentPos.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+          }
+        };
+
+        const handleStart = (e, node) => {
+          if (this.isProcessingAnswer || node.connected) return;
+          activeNode = node;
+          this.sound.playClick();
+          if (e.cancelable) e.preventDefault();
+        };
+
+        const handleMove = (e) => {
+          if (!activeNode) return;
+          const stageRect = this.gameUI.stage.getBoundingClientRect();
+          const touch = e.touches ? e.touches[0] : e;
+          const pos = {
+            x: touch.clientX - stageRect.left,
+            y: touch.clientY - stageRect.top
+          };
+          redraw(pos);
+          if (e.cancelable) e.preventDefault();
+        };
+
+        const handleEnd = (e) => {
+          if (!activeNode) return;
+          const touch = e.changedTouches ? e.changedTouches[0] : e;
+          const endEl = document.elementFromPoint(touch.clientX, touch.clientY);
+          const targetCol = activeNode.side === 'left' ? nodes.right : nodes.left;
+          const targetNode = targetCol.find(n => n.el === endEl || n.el.contains(endEl));
+
+          if (targetNode && !targetNode.connected) {
+            if (activeNode.val === targetNode.val) {
+              this.sound.playPop();
+              activeNode.connected = true;
+              targetNode.connected = true;
+              activeNode.el.classList.add('bg-emerald-100', 'border-emerald-500', 'scale-105');
+              targetNode.el.classList.add('bg-emerald-100', 'border-emerald-500', 'scale-105');
+              connections.push({
+                startEl: activeNode.side === 'left' ? activeNode.el : targetNode.el,
+                endEl: activeNode.side === 'left' ? targetNode.el : activeNode.el
+              });
+              if (connections.length === q.pairs.length) {
+                setTimeout(() => this.onAnswerSelected(true, null, "Hoàn thành!"), 300);
+              }
+            } else {
+              this.sound.playWrong();
+              targetNode.el.classList.add('animate-shake', 'border-red-400');
+              setTimeout(() => targetNode.el.classList.remove('animate-shake', 'border-red-400'), 450);
+              this.attemptCount++;
+            }
+          }
+          activeNode = null;
+          redraw();
+        };
+
+        q.leftSide.forEach(p => {
+          const btn = document.createElement('div');
+          btn.className = 'w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-white border-3 border-indigo-200 rounded-full flex items-center justify-center text-2xl sm:text-3xl md:text-4xl font-black text-indigo-900 shadow-sm cursor-pointer touch-none transition-all';
+          btn.textContent = p.num;
+          const node = { side: 'left', val: p.num, el: btn, connected: false };
+          nodes.left.push(node);
+          btn.addEventListener('touchstart', (e) => handleStart(e, node), { passive: false });
+          btn.addEventListener('mousedown', (e) => handleStart(e, node));
+          leftCol.appendChild(btn);
+        });
+
+        q.rightSide.forEach(p => {
+          const btn = document.createElement('div');
+          btn.className = 'w-24 h-20 sm:w-32 sm:h-24 md:w-40 md:h-28 bg-white border-3 border-indigo-200 rounded-2xl flex flex-wrap items-center justify-center p-2 shadow-sm cursor-pointer touch-none overflow-hidden transition-all';
+          let itemsHtml = '';
+          const emojiSize = p.num > 5 ? 'text-lg sm:text-xl md:text-2xl' : 'text-2xl sm:text-3xl md:text-4xl';
+          for (let i = 0; i < p.num; i++) {
+            itemsHtml += `<span class="${emojiSize} filter drop-shadow-sm">${p.item.emoji}</span>`;
+          }
+          btn.innerHTML = itemsHtml;
+          const node = { side: 'right', val: p.num, el: btn, connected: false };
+          nodes.right.push(node);
+          btn.addEventListener('touchstart', (e) => handleStart(e, node), { passive: false });
+          btn.addEventListener('mousedown', (e) => handleStart(e, node));
+          rightCol.appendChild(btn);
+        });
+
+        // Global listeners for the drawing interaction
+        const moveFn = (e) => handleMove(e);
+        const endFn = (e) => handleEnd(e);
+        window.addEventListener('mousemove', moveFn);
+        window.addEventListener('mouseup', endFn);
+        window.addEventListener('touchmove', moveFn, { passive: false });
+        window.addEventListener('touchend', endFn);
+
+        // Cleanup function for when stage is cleared
+        const cleanup = () => {
+          window.removeEventListener('mousemove', moveFn);
+          window.removeEventListener('mouseup', endFn);
+          window.removeEventListener('touchmove', moveFn);
+          window.removeEventListener('touchend', endFn);
+          ro.disconnect();
+        };
+        // Store cleanup on the stage element itself
+        this.gameUI.stage._cleanup = cleanup;
+
+        this.gameUI.stage.appendChild(leftCol);
+        this.gameUI.stage.appendChild(rightCol);
+      }
+
       /* Mode 7: Wait a bit for your turn (Chờ Đến Lượt) */
       renderWaitTurnQuestion(q) {
         this.clearWaitTurnTimeouts();
@@ -2115,6 +2332,7 @@
         if (finalStars === 3) this.awardBadge('perfect_3star');
         if (this.currentMode.id === 'more_less') this.awardBadge('more_less_master');
         if (this.currentMode.id === 'color_count') this.awardBadge('color_artist');
+        if (this.currentMode.id === 'match_connect') this.awardBadge('match_connect_hero');
         if (this.currentMode.id === 'wait_turn') this.awardBadge('patient_hero');
 
         this.updateHeaderStats();

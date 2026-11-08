@@ -21,6 +21,7 @@ KidsLogic is a rich, interactive web application designed for children aged 3–
 4.  **🧩 Số Tiếp Theo (Sequence):** Fill in the missing number in a logical sequence.
 5.  **🎨 Đếm Theo Màu (Color Count):** Filter objects by color and count only the target items.
 6.  **🔤 Sắp Xếp Thứ Tự (Number Ordering):** Tap numbers in ascending or descending order.
+7.  **🔗 Nối Số & Hình (Connect & Match):** Draw lines with your finger/mouse to connect numbers with their corresponding object groups.
 
 ## 🕹️ Input Protection ("Wait for Turn")
 
@@ -60,13 +61,15 @@ The application is built with a modular, class-based architecture contained with
 Since the application is contained within a single HTML file, you can run it simply by opening it in any modern web browser:
 
 ```bash
-open KidsLogic/KidsLogic.html
+open Logic/KidsLogic.html
 ```
 
 ## 📂 Project Structure
 
-- `KidsLogic/KidsLogic.html`: The main application file containing all structure, styles, and logic.
-- `KidsLogic/README.md`: Project documentation and technical overview.
+- `Logic/KidsLogic.html`: The main application file containing all structure, styles, and logic.
+- `Logic/plan.md`: The original development plan and architectural roadmap.
+- `Logic/README.md`: Project documentation and technical overview.
+- `Logic/khoan_tron_so_*.jpeg`: Reference worksheet images used for content inspiration.
 
 ---
 
