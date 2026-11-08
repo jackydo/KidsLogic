@@ -61,15 +61,37 @@ The application is built with a modular, class-based architecture contained with
 Since the application is contained within a single HTML file, you can run it simply by opening it in any modern web browser:
 
 ```bash
-open Logic/KidsLogic.html
+open KidsLogic/index.html
+```
+
+## ☁️ Deployment (Cloudflare Pages / Wrangler)
+
+KidsLogic is fully static and can be deployed instantly to Cloudflare Pages or Cloudflare Workers using Wrangler.
+
+### 1. Cloudflare Pages Deployment
+Publish the directory directly using Wrangler CLI:
+```bash
+npx wrangler pages deploy . --project-name=kidslogic
+```
+
+### 2. Cloudflare Workers (Static Assets) Deployment
+Create a `wrangler.toml` in the project root:
+```toml
+name = "kidslogic"
+compatibility_date = "2026-01-01"
+
+[assets]
+directory = "."
+```
+Then deploy via Wrangler:
+```bash
+npx wrangler deploy
 ```
 
 ## 📂 Project Structure
 
-- `Logic/KidsLogic.html`: The main application file containing all structure, styles, and logic.
-- `Logic/plan.md`: The original development plan and architectural roadmap.
-- `Logic/README.md`: Project documentation and technical overview.
-- `Logic/khoan_tron_so_*.jpeg`: Reference worksheet images used for content inspiration.
+- `KidsLogic/index.html`: The main application file containing all structure, styles, and logic.
+- `KidsLogic/README.md`: Project documentation and technical overview.
 
 ---
 
