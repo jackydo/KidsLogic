@@ -22,6 +22,31 @@ KidsLogic is a rich, interactive web application designed for children aged 3–
 5.  **🎨 Đếm Theo Màu (Color Count):** Filter objects by color and count only the target items.
 6.  **🔤 Sắp Xếp Thứ Tự (Number Ordering):** Tap numbers in ascending or descending order.
 
+## 🕹️ Input Protection ("Wait for Turn")
+
+To ensure a frustration-free experience for young children, the app implements a robust input locking system:
+- **Locking Mechanism:** Uses an `isProcessingAnswer` guard and `pointer-events: none` to prevent double-taps or rapid-fire answering during animations.
+- **Focus Guard:** Interaction is briefly disabled during transition sounds and confetti celebrations to ensure the child observes the feedback before proceeding.
+- **Feedback Loop:** Wrong answers trigger a gentle shake animation and mascot hint, encouraging the child to pause and recount before trying again.
+
+## 🏗️ App Structure
+
+The application is built with a modular, class-based architecture contained within a single file for maximum portability:
+
+- **Screen Manager:** A single-page application (SPA) architecture using CSS classes (`hidden`/`flex`) to swap between:
+    - `screenHome`: Entry point with mascot and high scores.
+    - `screenModeSelect`: Catalog of 6 learning activities.
+    - `screenLevelSelect`: Progression mapping for each mode.
+    - `screenGamePlay`: The interactive worksheet stage.
+    - `screenLevelComplete`: Celebratory results and star awards.
+    - `screenBadges`: Achievement showcase.
+- **Logic Core (`KidsLogicApp`):** The central controller managing the game state, question progression, and UI updates.
+- **Utility Modules:**
+    - `SoundEngine`: Generates procedural audio tones and manages Text-to-Speech.
+    - `ConfettiEffect`: Handles the canvas-based celebration particles.
+    - `StorageManager`: Wraps `LocalStorage` for persistent progress tracking.
+- **Procedural Generation:** Questions are dynamically generated at runtime based on level-specific ranges (`range`) and themed emoji libraries (`THEMES`), ensuring no two sessions are identical.
+
 ## 🛠️ Technical Details
 
 - **Frontend:** HTML5, CSS3 (Tailwind CSS), Vanilla JavaScript.
@@ -41,8 +66,7 @@ open KidsLogic/KidsLogic.html
 ## 📂 Project Structure
 
 - `KidsLogic/KidsLogic.html`: The main application file containing all structure, styles, and logic.
-- `KidsLogic/plan.md`: The original development plan and architectural roadmap.
-- `KidsLogic/khoan_tron_so_*.jpeg`: Reference worksheet images used for content inspiration.
+- `KidsLogic/README.md`: Project documentation and technical overview.
 
 ---
 
